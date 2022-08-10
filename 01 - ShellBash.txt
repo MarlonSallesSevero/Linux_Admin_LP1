@@ -1,0 +1,299 @@
+
+"""
+*LINUX FORCE
+
+*01 - Shell Bash*
+
+BASH : Bourne Again Shell
+
+**A extensao não sao necessaria no linux.
+**No linux tudo é arquivo, de tipos diferentes.
+** systemd-private = diretorio
+
+Temos geralmente 2 Users
+
+analista: user comum
+root: super usuario
+
+analista@interno:~$
+|______|_|_____| |_|
+usuario| |hostname| |diretorio atual|
+
+whoami - usuario logado.
+
+id - retorna o numero de indentificacao do usuario.
+
+hostname - nome da maquina
+
+hostnamectl - nome da maquina + arquitetura, etc
+
+pwd : Lista o diretorio que voce esta localizado no momento. *Print Work Directory
+
+cd : Entrar/abrir a pasta que selecionarmos. *Change Directory
+
+$ : usuario comum
+
+# : super usuario root
+
+** su : abre uma sessao assumindo ela. É recomendado user os parametros o '-'
+para carregar as variaveis de ambiente daquele usuario.Para os comportametos da shell ser com base
+na realidade do usuario.
+    ex: su - root
+    ex2: su -l root
+    ex: su -
+
+logout / exit : fecha a sessao aberta
+
+ls : ler/ver o que esta dentro de uma pasta qualquer.
+    pode fazer ls /home para lermos o que tem na pasta.
+
+.. : Utilizado no terminal para voltarmos uma pasta anterior.
+
+ls -la : Para ser exebido os arquivos ocultos com as permissões.
+
+ls -l : Utilizado para abrir uma listagem longa.
+
+        tipo diretorio - permissoes - links diretos - usuario dono - grupo principal - tamanho - data ultima modificacao - nome
+
+        drwxr-xr-x   2   root  root  126976  Jan  24  01:05  bin
+        lrwxr-xr-x   2   root  root  126976  Jan  24  01:05  bin -> usr/bin
+
+    1º - letra é o tipo de arquivos
+
+    d - diretorios
+    l - link simbolico/atalhos
+    '-' - arquivos comuns
+ctrol + l : limpa terminal
+
+touch : Jeito rapido e pratico de criar qualquer quantidade de arquivos vazios.
+        Podemos escrever touch file1 file2 file3 para criar 2 arquivos na pasta que estamos dentro.
+        Podemos tambem definir onde queremos salvar cada arquivo.
+
+rm : Utilizado para remover arquivos.
+    O comando é bem perigoso pois o terminal nao faz nenhuma pergunta.
+    Simplesmente apaga.
+    Podemos usar os caracteres coringas.
+
+rm -i : pede confirmacao
+
+rmdir - remove diretorios vazios
+
+rm -r : remove deretorio e arquivos dentro de forma recursiva.
+ *-rf : para forcar
+
+cp -p origem destino : Usado para copiar uma coisa como arquivo/pasta de um lugar para outro.
+    O ideal é passarmos o parametro '-p' para preservar os proprietarios.
+    ex: cp /etc/hosts /tmp/
+
+Podemos usar o '.' para copiar para o diretorio atual.
+    ex: cp /etc/hosts .
+
+cp -r : copiar diretorios de maneira recursiva.
+    ex: cp -rp origem destino
+
+cp -v : modo verboso (copy)
+
+
+mv origem destino: Utilizado para mover diretorios e arquivos. (move)
+
+*Podemos usar para renomear
+
+mv hosts maquinas -v
+
+who : Quem esta conectado na maquina
+*use o man who
+
+w : remete ao who, tras info do usuario e ultimas açoes.
+
+getent passwd : base de dados de todos os usuarios cadastrados no linux.
+
+id usuario : tras o numero de indentificacao do usuario.
+
+-------------------------------------------------------------------------
+02 - **HISTORICO E AJUDA**
+
+history : historico de comandos listados. Muda de usuario para usuario.
+Os comandos do historico ficam salvos nom arquivo.
+
+/home/.bash_history
+
+history -w : forca a gravacao de comandos executados. Para usar apos reiniciar.
+
+history -c > enter > history -w : limpeza do historico de comandos
+
+!numero_linha : reexecutar os comandos colocando
+history numeral: Quantidade definida de ultimos comandos
+        ex: history 10 : ultimos 10 comandos
+
+*Os comandos internos do linux, nos acessarmos pelo help**
+
+Sao comandos proprios do Shell Bash
+
+help comando : É de pedir ajuda para comandos da builtin.
+
+--help comando : ele tras as principais opcoes do comando.
+
+info : tambem pode ajuda a respeito de comandos. Ele nao vem por default
+
+man comando : Principal ferramenta para acessar os manuais.
+              Esses manuais ficam num lugar especifico. (/usr/share/man/)
+
+mandb : atualiza os diretorios que tem manuais.
+
+man -k palavra_chave : tras uma lista de manuais e a sessao referente a palavra chave.
+    ex: man -k network
+
+apropos palavra_chave : faz a mesma coisa que o man -k palavra_chave
+
+whatis nome_manual : tras manuais referente ao nome definido.
+
+man -f palavra_chave : faz a mesma coisa que o whatis
+
+*Os manuais sao divididos por sessoes.
+
+Para acessar uma sessao especifica voce pode digitar > man       8       intro.
+                                                     |comandos|sessao|nome_manual
+
+ps: help é diferente de --help
+
+ls -l usr/share/man : Os manuais ficam dentro desse diretorio
+
+whereis comando : local onde fica o exe(bin), cod. fonte se tiver, local onde fica o manual.
+    ex: where is pwd
+
+which comando : tras onde esta o executavel do binario.
+
+ls -l usr/share/doc : tras onde esta a documentacao dos software
+
+-------------------------------------------------------------------------
+
+03 - Manuais e Redirecionadores
+
+Principal dispositivo de entrada > teclado
+
+Principal dispositivo de saida > monitor
+
+*Dispositovos Padroes
+
+ls -l /dev/std*
+
+teclado : /dev/stdin (o)
+monitor : /dev/stdout (1)
+error : /dev/stderr (2)
+
+cat : Utilizado para ler arquivos no terminal. Colocamos ' cat nomedoarquivo '.
+        É mais utilizado quando queremos ter certeza que NAO VAMOS editar/alterar algum arquivo.
+
+less e more : Quase a mesma utilizadade do ' cat ' porém o ' less ' abre uma nova guia para a gente.
+        Não exibindo o texto no terminal que estamos trabalhando.
+
+*find : realiza buscas.
+    ex. find / -size +20M
+
+> : redirecionamento sobreescrevendo/criando
+    ex. ls /etc/*.conf >> saida.txt
+ps : se o arquivo nao existe é criado, e se ele existe é sobreescrito.
+     Se nao passar caminho, cria onde esta.
+
+>> redirecionamento incrementando/criando (append)
+    ex> ls /etc/*.conf >> saida.txt
+
+**Saida com Sucesso e Saida com erros :
+        ex. find / -size +20M 1> saida1.txt 2> saida2.txt
+ps. 2> é obrigatorio para dizer que é saida de erros.
+
+**Redirecionando os sucesso e nao tratando o erro
+        ex2. find / -size +20M 1> saida1.txt
+**Redirecionando os sucesso e jogando os erros no buraco negro
+        ex3. find / -size +20M 1> saida1.txt 2> /dev/null
+
+ps. dev/null serve para descarte de info
+
+** Redirecionando os sucessos e os com erros no mesmo arquivo :
+    ex. find / -size +20M 1> saida1.txt 2> &1
+    ou
+    ex. find / -size +20M >> saida1.txt 2> &1
+
+<< : redirecionamento para o comando cat 
+Uma forma de criar arquivo com conteudo, sem precisar de um
+editor de texto.
+
+É um fluxo continuo de entrada.
+    
+    ex. cat  << EOF > saida.txt
+     
+PS: palavra chave mt usada (EOF -> end of file)
+
+nano : É um editor de texto utilizado no terminal para criar/editar/renomear arquivos de texto.
+        Basta digitar nano e o nome do arquivo que você quer criar.
+
+grep e | :
+            grep : Este comando significa pegar/puxar algo de algum lugar
+
+            | : O comando pipe significa filtrar, pegar somente aquilo que definirmos após o pipe.
+                Lembrando que o comendo é case-sensitive. Para ignorarmos isso, temos que colocar -i.
+
+        Exemplo: cat sources.list | grep -i src
+
+        Basicamente estamos pegando o arquivo sources.list e estamos filtrando tudo que tem 'src' nele.
+        Ignorando letras maiusculas ou minusculas. Este comando comando é muito importante e muito
+        utilizando tambem quando vamos fazer grandes varreduras de rede. E vamos querer criar arquivos
+        com as informações uteis que coletarmos.
+
+echo : Utilizado quando queremos imprimir algum texto qualquer, ou adicionar alguma texto em alguma arquivo de texto.
+
+        Imprimindo um texto aleatorio:
+            echo 'texto aleatorio'
+
+        Adicionando um texto a outro arquivo:
+            echo 'texto que sera adicionado' > arquivo.txt
+
+        IMPORTANTE: O texto vai substituir o que esta escrito no arquivo.txt
+
+
+chown : Utilizado para alterar as propriedades de um determinado arquivo.
+            definimos o username e o usergroup e após isso o nome do arquivo.
+        ex:
+        ''' chown root : root test '''
+
+chmod : Muito utilizado para realizar a alteração nas permissões dos arquivos.
+        Ele é utilizado com frequencia porque voce se ve por exemplo com um arquivo executavel.
+
+        Para alteramos alguma permissoes digitamos: chmod + opção
+
+            w : O arquivo seja gravavél/writable. ' chmod + w '
+            x : O arquivo seja executavel. ' chmod + x '
+            r : Para definirmos a leitura/read do arquivo: ' chmod + r '
+
+        Temos tambem o que é chamado de global mode ou modo global.
+
+        chmod 777
+
+        Nao é recomendado para uso geral. Todo mundo pode fazer qualquer coisa com o arquivo.
+        Mas utilizamos para solucinar problemas, por exemplo : Queremos ter certeza que nao estamos conseguindo realizar
+        certas coisas por causa das permissoes de arquivos. Se voce ainda nao conseguir acessar, pode ter certeza
+        que nao tem haver com permissoes de arquivo.
+
+.sh : É basicamente um executavel que é um script bash para o linux. Nos possibilitando assim
+        automatizar tarefas.
+        Precisamos nos familiarizar com bash scripting/Shell script
+        Mas é muito similar ao terminal, porem juntamos tudo em um arquivo.
+
+./ : Utilizado para iniciarmos qualquer executavel.
+
+
+
+OBS: / é onde o sistema operacional 'começa' no linux. É onde todos os arquivos
+estao localizados.
+
+"""
+
+
+"""ADICIONANDO UM USUARIO
+
+adduser username 
+    Após isso o sistema cria uma pasta no diretorio /home com o nome do usuario.
+    Nunca navegue na internet com o usuario root.
+    
+
+"""
