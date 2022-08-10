@@ -1,0 +1,56 @@
+03 - Manuais e Redirecionadores
+
+Principal dispositivo de entrada > teclado
+
+Principal dispositivo de saida > monitor
+
+*Dispositovos Padroes
+
+ls -l /dev/std*
+
+teclado : /dev/stdin (o)
+monitor : /dev/stdout (1)
+error : /dev/stderr (2)
+
+cat : Utilizado para ler arquivos no terminal. Colocamos ' cat nomedoarquivo '.
+        É mais utilizado quando queremos ter certeza que NAO VAMOS editar/alterar algum arquivo.
+
+less e more : Quase a mesma utilizadade do ' cat ' porém o ' less ' abre uma nova guia para a gente.
+        Não exibindo o texto no terminal que estamos trabalhando.
+
+*find : realiza buscas.
+    ex. find / -size +20M
+
+> : redirecionamento sobreescrevendo/criando
+    ex. ls /etc/*.conf >> saida.txt
+ps : se o arquivo nao existe é criado, e se ele existe é sobreescrito.
+     Se nao passar caminho, cria onde esta.
+
+>> redirecionamento incrementando/criando (append)
+    ex> ls /etc/*.conf >> saida.txt
+
+**Saida com Sucesso e Saida com erros :
+        ex. find / -size +20M 1> saida1.txt 2> saida2.txt
+ps. 2> é obrigatorio para dizer que é saida de erros.
+
+**Redirecionando os sucesso e nao tratando o erro
+        ex2. find / -size +20M 1> saida1.txt
+**Redirecionando os sucesso e jogando os erros no buraco negro
+        ex3. find / -size +20M 1> saida1.txt 2> /dev/null
+
+ps. dev/null serve para descarte de info
+
+** Redirecionando os sucessos e os com erros no mesmo arquivo :
+    ex. find / -size +20M 1> saida1.txt 2> &1
+    ou
+    ex. find / -size +20M >> saida1.txt 2> &1
+
+<< : redirecionamento para o comando cat 
+Uma forma de criar arquivo com conteudo, sem precisar de um
+editor de texto.
+
+É um fluxo continuo de entrada.
+    
+    ex. cat  << EOF > saida.txt
+     
+PS: palavra chave mt usada (EOF -> end of file)

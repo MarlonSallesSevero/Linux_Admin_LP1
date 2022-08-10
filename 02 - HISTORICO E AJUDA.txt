@@ -1,0 +1,57 @@
+-------------------------------------------------------------------------
+02 - **HISTORICO E AJUDA**
+
+history : historico de comandos listados. Muda de usuario para usuario.
+Os comandos do historico ficam salvos nom arquivo.
+
+/home/.bash_history
+
+history -w : forca a gravacao de comandos executados. Para usar apos reiniciar.
+
+history -c > enter > history -w : limpeza do historico de comandos
+
+!numero_linha : reexecutar os comandos colocando
+history numeral: Quantidade definida de ultimos comandos
+        ex: history 10 : ultimos 10 comandos
+
+*Os comandos internos do linux, nos acessarmos pelo help**
+
+Sao comandos proprios do Shell Bash
+
+help comando : É de pedir ajuda para comandos da builtin.
+
+--help comando : ele tras as principais opcoes do comando.
+
+info : tambem pode ajuda a respeito de comandos. Ele nao vem por default
+
+man comando : Principal ferramenta para acessar os manuais.
+              Esses manuais ficam num lugar especifico. (/usr/share/man/)
+
+mandb : atualiza os diretorios que tem manuais.
+
+man -k palavra_chave : tras uma lista de manuais e a sessao referente a palavra chave.
+    ex: man -k network
+
+apropos palavra_chave : faz a mesma coisa que o man -k palavra_chave
+
+whatis nome_manual : tras manuais referente ao nome definido.
+
+man -f palavra_chave : faz a mesma coisa que o whatis
+
+*Os manuais sao divididos por sessoes.
+
+Para acessar uma sessao especifica voce pode digitar > man       8       intro.
+                                                     |comandos|sessao|nome_manual
+
+ps: help é diferente de --help
+
+ls -l usr/share/man : Os manuais ficam dentro desse diretorio
+
+whereis comando : local onde fica o exe(bin), cod. fonte se tiver, local onde fica o manual.
+    ex: where is pwd
+
+which comando : tras onde esta o executavel do binario.
+
+ls -l usr/share/doc : tras onde esta a documentacao dos software
+
+-------------------------------------------------------------------------
