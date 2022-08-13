@@ -54,3 +54,9 @@ editor de texto.
     ex. cat  << EOF > saida.txt
      
 PS: palavra chave mt usada (EOF -> end of file)
+
+set -o noclobber : bloqueando a reescrita.
+Somente na sessao ativa.
+
+set +o noclobber : habilitando a reescrita
+

@@ -1,0 +1,62 @@
+*COMANDOS PROCESSAMENTO DE TEXTO*
+
+wc : contador podendo copiar por linhas, palavras e bytes. 
+
+| (pipe): resultado de um comando como resultado para outro. 
+
+    ex : ls /etc/*.conf | wc -l 
+
+head: selecao de linhas que quer pegar
+
+sort : ordenação 
+
+    ls /etc/*.conf |head -n  10 |sort 
+
+sort -r : ordenação resersa
+
+cal : calendario 
+
+date : data atual 
+
+tee == > : igual sinal de maior para redirecionamento porem mostra o resultado na tela. (MAIS VANTAJOSO)
+
+tee -a == >> : igual sinal de maior maior para incrementar no arquivo. 
+
+echo : Utilizado quando queremos imprimir algum texto qualquer, ou adicionar alguma texto em alguma arquivo de texto.
+
+tr : delete / translate delecao ou traducao de caracteres.
+    utilizamos esse comando geralmente para manipulacoes
+
+    ex: echo "teste" | tr -d e
+ps: somente visual
+
+exemplos head :
+
+head -n 5 /tmp/passwd | tr -d : 
+ps: somente visual
+
+substituicao:
+
+head -n 5 /tmp/passwd | tr i a 
+
+head -n 5 /tmp/passwd | tr a-z A-Z 
+
+grep : utilizado para filtragem.
+    ex. grep false /tmp/passwd 
+ps:estamos pegando todas linhas quem tem 'false' escrito
+
+grep --color : utilizado para destacar a palavra procurada.
+
+grep -i : utilizado para nao distinguir Maiculo de Minusculo
+
+
+grep -i --color manager /tmp/passwd 
+
+grep -r : utilizado para realizar busca dentro de diretorios. De forma recursiva.
+    ex. grep --color -i -r manager /etc
+
+ grep -n: utilizado para numerar as linhas das pesquisar
+    ex. grep -n -i --color bash /temp/0passwd
+
+grep -v : utilizado para negacao 
+    ex2. grep -v -n -i --color :
