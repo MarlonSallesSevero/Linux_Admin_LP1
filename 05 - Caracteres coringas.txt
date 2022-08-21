@@ -1,0 +1,22 @@
+05 - Caracteres coringas
+
+* : igual no sql pega tudo 
+    ex. ls /etc/*.conf
+
+? : subtitui a quantidade definida para caracteres
+    ex. /etc/*.???
+ps. vai pegar arquivos que tem 3 caracteres apos o ponto.
+
+{} : lista de objetos 
+
+    ex. ls /etc/*.{conf,cfg}
+    ex2. ls -l /etc/{ufc,host}.conf
+    ex3. ls -l /etc/[a-d]*.conf
+    ex4. ls -l /etc/[!a-d]*.conf
+
+ex : touch -v arq0{1..5}.txt 
+     mkdir -n arq{1..5}
+
+    
+
+    
