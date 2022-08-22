@@ -61,3 +61,36 @@ arquivo swap: podemos criar uma particao ou um arquivo.
 ps: ativacao temporaria dessa maneira. Pelo arquivo, precisando dar um swapon ao inicializar um sistema.
 Muito utilizado para manutençoes onde o servico nao pode parar.
 
+uniq: elimina linhas duplicadas.
+*uniq -c : faz a contagem de repetições da linha
+
+	ex: sort lista | uniq -c
+	 
+*uniq d : traz as linhas duplicadas.
+
+paste: exibe um arquivo do lado do outro no terminal.
+
+join : realiza uma junção dos arquivos, levando em consideracao o index.
+
+head : imprimi somente as primeiras linhas de um arquivo.
+*head -n {n de linhas}
+
+tail: exibe as ultimas linhas do arquivo.
+
+cut : utilizado para cortar arquivos
+
+ex: head -n 5 /tmp/passwd | cut ':' -f 1-3
+ex: head -n 5 /tmp/passwd | cut -c 1-10
+*-n : total de linhas
+*':' : delimitador definido
+*-f : utilizado para selecionar quais 'fields' queremos 
+*-c : corta por caracter
+
+awk : Tem varias utilidades, uma delas é de manipulacao de arquivo.
+
+ex : head -n 5 /tmp/passwd | awk -F ':' '{print $1 $2}'
+ex2: head -n 20 /tmp/passwd | awk -F ':' '$3 > 10 {print NR, $1,$3}'
+
+
+
+
