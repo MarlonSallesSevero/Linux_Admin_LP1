@@ -79,6 +79,10 @@ tail: exibe as ultimas linhas do arquivo.
 
 cut : utilizado para cortar arquivos
 
+ex.
+>> marlon:x:1000:1000:marlon,,,:/home/marlon:/bin/bash
+  |user|senha|id|group_id
+
 ex: head -n 5 /tmp/passwd | cut ':' -f 1-3
 ex: head -n 5 /tmp/passwd | cut -c 1-10
 *-n : total de linhas

@@ -1,0 +1,159 @@
+07 - Localizacao de Arquivo e Editores de Texto
+
+>>> find : faz a busca em um diretorio especificado.
+
+ex. find /etc/ -name group
+>>> ex2. ignorando caseSensitive.
+
+find /home/marlon/Desktop/ -iname linux_Admin
+
+ex3. podemos buscar por dono de arquivos
+>>> find -user marlon -iname linux_Admin
+
+O -exec executa um comando sobre a listagem.
+
+>> find /home/marlon -user root -exec ls -lh {}\;
+
+xargs : sobra cada linha do resultado executa uma acao.
+
+>> find -user marlon | xargs ls -lh     
+
+ps. nao ẽ possivel gerar um ls somente com pipe pois o resultado do find seria um 'arquivo' so. 
+
+* Busca por Tamanho de arquivo.
+
+find / -size +20M 
+find / -size +20M 2> /dev/null
+
+find / -size +20M 2> /dev/null | xargs du -h
+find / -size +20M -size -30 2> /dev/null | xargs du -h
+find / -name nomeArquivo -size +20M -size -30 2> /dev/null | xargs du -h
+
+find /var -type l 
+find /var -type l | xargs ls -l 
+find /var -type f | xargs ls -ld
+
+*Nivel de profundidade na busca recursiva
+
+find /var/ -type f -maxdepth 2 | xargs ls -ld
+
+*Por estatiscas de arquivo
+
+stat : estatisticas do arquivo.
+
+Por minutos:
+
+-amin = acess
+-mmin = modify 
+-cmin = change
+
+find /tmp -amin -10
+
+Por hora:
+-atime 
+-mtime 
+-ctime 
+
+find /tmp -mtime -1
+
+EDITORES DE TEXTO
+
+1 - modo de comandos 
+
+y = copiar
+p = cola 
+
+2 - modo de inserceção
+
+i = insert 
+a = append 
+A = append 
+i= insert 
+
+o = insert new line 
+O = insert new line 
+
+insert = insert 
+
+3 - linha de comando - :
+
+:w = salva
+:q = sair 
+:wq = salva e sai 
+
+/ : usado para localização
+
+podemos usar n(next) para continuar localizando.
+Localiza de cima para baixo.
+
+? : tambem utilizado para localização.
+Porem localiza de cima para baixo.
+
+*Substituição 
+
+:%s/sexta/segunda/g
+
+-%s : em todas linhas
+- /palavra localizar/palavra substituir : para realizar a substituicao 
+
+- g : para confirmar 
+
+- h j k l - serve para movimentar o cursor 
+
+h - esquerda 
+j - baixo
+k - cima 
+l - esqueda
+
+:set noincsearch : para desabilitar / realizar a negacao
+
+no+opção para desabilitar qualquer opção. (direto pelo vim é temporario)
+
+/etc/vim/vimrc : arquivo de configuração do vim para config fixa.
+
+syntax on : syntax highlighting >> faz a interpretação de palavras chave.
+
+Podemos criar personalização por usuario criando um .vimrc no /home do usuario.
+
+':split /tmp/outroArquivo' : ira realizar a tela na vertial e abra o outro arquivo.
+
+ 	>> ctrol + w + w : muda arquivo de um para outro.
+ 	(muito util quando nao temos mouse)
+
+':qall' : usado para finalizar todos os arquivos abertos.
+
+':!comando' : utilizado para executar comandos dentro do arquivo. 
+	      porem executa fora do vim. E depois podemos voltar no
+	      arquivo.
+	      
+':comando!' : ele executa o comando e o resultado coloca no arquivo.
+
+NANO - OUTRO EDITOR DE TEXTO
+
+Entra direto no modo de texto.
+Varias opções.
+
+ ^ = ctrol 
+ M = alt 
+  
+^opçao : exibido no menu do nano 
+
+SED - Utilizado para fazer manipulações direto no arquivo.
+é um streen-editor.
+
+Podemos usar para substituição de palavras.
+
+ex. sed -e 's/feira/supermercado/g' (-e somente visual)
+            |pala.sub|nova.palav|
+ex2.sed -i 's/feira/supermercado/g' (-i faz ser definitivo)
+ex3.sed -e '/feira/supermercado/d' (/d faz a deleção)
+
+blkid : indenticação de bblocos
+
+ 
+ 
+
+
+
+
+
