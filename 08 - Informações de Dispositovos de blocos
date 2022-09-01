@@ -1,0 +1,46 @@
+Informações de Dispositovos de Blocos
+
+Script- Programa utilizado para captura de comandos e resultados do terminal.
+
+ex. script -q disco.txt (-q forma silenciosa)
+
+-a : realiza um append em um arquivo ja existente.
+
+Utilizado para captura de informações.
+
+Um disco para utilizado é necessario preparar (particionar ele)
+
+MBR : permite criar ate 4 partições.
+Pelo menos uma tem que ser extendida.
+
+sd - nomenclatura de discos.
+
+sda - o 'a' vem da ordem.
+
+1 - 4 : Primaria ou extendida.
+*** AS PARTIÇÕES LOGICAS COMEÇARAM NO 5 -> EX. sda5'
+
+GPT : Utilizado para partições maiores.
+
+lsblk : traz a visao estruturante de quais discos e partições temos desse disco.
+
+fdisk -l : utilizado para listar as partições 
+do disco. E varias informações importantes.
+
+fdisk -f : tras o file system.
+
+cat /proc/partitions : arquivo que contem a informação das partições.
+
+- Não quer dizer que as partições estao em disco.
+
+No linux, para usar as partições temos que ter um local para ter o ponto de montagem.
+
+Isso é armazenadao em um diretorio.
+
+Exemplo sda1 geralmente é montado em /boot
+
+df -hT : Utilizado principalmente para validar o espaço em uso e sem uso.
+
+mount : exibe onde os dispositivos estao montados
+
+
