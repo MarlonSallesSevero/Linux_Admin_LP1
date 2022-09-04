@@ -1,0 +1,31 @@
+09 - Informações de Dispositivos
+
+free -h : utilizado para capturar e vizualizar a quantidade de uso da memoria e da swap.
+
+
+cat /proc/meminfo : utilizado para vizualizar as info da memoria, porem direto no arquivo que atualiza de forma 
+dinamica.
+
+top : muito parecido com o gerenciador de tarefa; Atualizado a cada 3 segundos.
+
+cat /proc/cpuinfo : tras  as informações referente ao processador.
+
+lscpu : exibe as mesmas informações do cpuinfo.
+
+vmstat : utilizado para vizualizar as info do uso de memoria. Pórem pode ser utilizado para cpu, disco, e 
+outras informações. Vale a pena dar um man vmstat
+
+ex. vmstat -D 
+
+lsusb : utilizado para validar informações de USB, quantidade, etc...
+
+lspci : exibe os dispositivos pci's.
+
+ex. lspci -k : tras o drive do kernel.
+
+lshw : trabalha a nivel de host, realiza a extrassao de algumas info de hardware da sua maquina.
+
+ex. podemos criar arquivos .html e outras extenções.
+
+
+
