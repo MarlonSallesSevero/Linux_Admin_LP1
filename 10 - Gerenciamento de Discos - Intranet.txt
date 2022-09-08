@@ -1,0 +1,32 @@
+>> Sistemas de arquivos mais utilizados 
+	> ext4 (arquivos menores)
+	> xsf = arquivos maiores (armazenamento)
+
+> lsblk > vizualização de discos internos
+
+> mkfs (make file-system) : utilizado para criação/alocação do sistemas de arquivos nos discos.
+
+Criando 2 partições de 4GB:
+
+1° passo, selecionar o disco : fdisk /dev/sdb
+2º passo, Validar opções com 'm'
+3° passo, Validar espaço nao alocado com a opção 'F'
+4° passo, Criar uma partição nova clicando 'n'.
+5º passo, selecionar o tipo da partição (primaria ou extendida)
+6º passo, selecionar a numeracao (geralmente padrao)
+7° passo, selecionar quantidade de setores. (geralmente padrao)
+8° passo, selecionar final do setor. (+4G) Geralmente feito assim para selecionar o tamanho a partir do inicio
+9° passo, usar a opção 'p' para mostrar as partições.
+10 passo, use a opção 'w' para gravar.
+11° passo, definir o sistema de arquivos com o 'mkfs -t xfs /dev/sdb1' ou 'mkfs.xfs /dev/sdb1'
+12° passo, definição da label (rotulo) com 'xfs_admin -L express /dev/sdb1'
+13° passo, realizar a montagem (preferenciamente em um diretorio exclusivo)
+14° passo, criar um diretorio.
+15° passo, mount [dispositivo] [diretorio] > mount /dev/sdb1 /srv/www/express/
+16° passo, fixando para montagem automatica > vim /etc/fstab
+	> em uma nova linha, /dev/sdb1/www/express xfs default 0 0 
+ou
+	> LABEL=logs /var/log/apache2 xfs defaults 0 0 
+ps. podemos fazer pelo uid tambem.
+
+17° passo, executar 'mount -a' 
