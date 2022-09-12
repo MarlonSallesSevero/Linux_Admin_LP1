@@ -1,0 +1,41 @@
+Podemos realizar uma 'migração de sistemas de arquivos' realizamos a instalação de features no file-system para passar de 
+um ext3 > ext4.
+
+Não é recomendado mudar entre familias.
+
+ps para criação de label: tune2fs, para file-systems ext2,ext3,ext4,etc;
+    xfs_admin, para file-systems xfs 
+
+Exemplo:
+
+1° passo, criar as partições com o fdisk fdisk /dev/sdb 
+2° passo, processo de formatação com o 'm' 
+3  passo, criar os labels com 'tune2fs -L nome /dev/sdb1'
+4º passo, criação dos diretorios para montagem 'mkdir'
+5° passo, inicialização automatica no fs pelo 'vim /etc/fstab'
+	passar no arquivo > 'dev/sdb1 /home/analista/git ext3 defaults 0 0'
+6º passo, montar com 'mount -a' 
+
+***Relizando o empacotamento de dados****
+
+tar (tarbound) : 
+
+
+cpio (copy IO) : Utilizado para gerar pacotes de arquivos. 
+
+Compactação:
+
+	find /home/analista/git | cpio -ov > /backup/conf.cpio  
+	
+		1° passo, trazer uma listagem de todos os arquivos a serem impacotados. Com o find geralmente.
+	
+		2° passo, passar o resultado da listagem para o cpio 
+			-o : create
+			-v : verbose
+
+		3° passo, direcionar onde o pacote com os arquivos sera criado.
+
+Descompactação:
+	cpio -iv < /backup/conf.cpio 
+
+		1° passo, extraindo o pacote gerado de arquivos. Arquivo original se mantem.
