@@ -20,10 +20,18 @@ Exemplo:
 
 tar (tarbound) : 
 
+Empacotamento
+	
+ 	tar -cvf nome_arquivo /pasta_copiar /pasta2
+	ex. tar -cvf /backup/conf.tar /home/analista/git  	
+
+	-c : create
+	-v : verbose
+	-f : file 
 
 cpio (copy IO) : Utilizado para gerar pacotes de arquivos. 
 
-Compactação:
+Empacotamento
 
 	find /home/analista/git | cpio -ov > /backup/conf.cpio  
 	
@@ -34,8 +42,33 @@ Compactação:
 			-v : verbose
 
 		3° passo, direcionar onde o pacote com os arquivos sera criado.
-
-Descompactação:
+Desempacotamento:
 	cpio -iv < /backup/conf.cpio 
 
 		1° passo, extraindo o pacote gerado de arquivos. Arquivo original se mantem.
+
+***Compactacao de Arquivos Empacotados****
+
+Os principais sao : 
+
+	gzip : gzip conf.cpio
+	gunzip : descompactador do gz
+
+	bzip2 : bzip.tar.bz2
+	bunzip2 : descompactador do bz2	
+
+	xz : xz conf.tar 
+	unxz : descompactador do xz
+
+**Fazendo o empacotamento + compactacao de arquivos com o tar **
+
+-j, --bzip2
+-z, --gzip 
+-J, --xz
+(extencao completa)
+
+ex1. tar -cvjf /backup/conf.tar.bz2 /home/analista/git 
+
+ex2. tar -cvzf /backup/conf.tar.gz /home/analista/git
+
+ex3. tar -cvJf /backup/conf.tar.xz /home/analista/git
