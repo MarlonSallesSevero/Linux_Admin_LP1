@@ -1,0 +1,46 @@
+**Configuracao de Enderecos IP's**
+
+*lo : loopback (utiliza.do para comunicacao interna 127.0.0.1) ele e padrao do linux.
+
+1 - definicao hostname: hostnamectl set-hostname nomedamaquina.asf.com
+
+2 - configuracao Ip, utilizamos o comando 'ip' para definicao 
+
+	ip address : exibe os ip`s
+	ip route : mostra as rotas criadas para as outras redes
+
+*Config ip >> configurar direto no arquivo
+	
+	__________________________________________________________________________________
+	|entra na pasta : cd /etc/sysconfig/network-scripts/ 				  |
+	| criar o arquivo : vim ifcfg-nome_placa					  |
+	| digitar dentro do arquivo:							  |
+	|	TYPE=Ethernet 				(tipo de placa)			  |
+	|	BOOTPROTO=static 			(static ou dhcp)		  |
+	|	DEVICE=enp0s8 				(dispositivo)			  |	
+	|	NAME=enp0s8    				(name)				  |
+	|	ONBOOT=yes 				(quando ligar maquina disp. ip)   |
+	|	IPADDR1=192.168.1.1 			(endereco ip)			  |
+	|	IPADDR2=192.168.1.2 
+		NETMASK=255.255.255.0 			(mascara de rede)	          |
+	|										  |
+	|						ps. Poderia ter gateway		  |
+	|_________________________________________________________________________________|c
+
+3 - reinicializacao do servico de internet : systemctl restart NetworkManager
+
+4 - Mostrando as interfaces : nmcli con show 
+
+5 - Vinculacao ao dispositivo : nmcli con up enp0s8 
+
+6 - Configuracao do DNS : vim /etc/resolv.conf
+	
+	INSERT > nameserver 8.8.8.8
+
+7 - Adicionando atributo imutavel : chattr +i /etc/resolv.conf 
+
+ps. chattr -i /etc/resolv.conf para tirar o atributo
+
+ps. para listar atributos em um arquivo : lsattr /arquivo
+
+ps. para tirar o arquivos para configs futuras

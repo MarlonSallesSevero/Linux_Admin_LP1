@@ -30,3 +30,27 @@ ou
 ps. podemos fazer pelo uid tambem.
 
 17° passo, executar 'mount -a' 
+
+---------------------------------------------------
+
+*Migracao de ext3 para ext4*
+
+1 passo, checagem de integridade e salvar seu codigo de integridade.
+	Ferramentas que podemos usar - md4sum e sha1sum
+	ex. sha1sum conf* > /etc/conf.sha1sum
+
+2 passo, sair do diretorio `cd /`
+
+3 passo, desmonta o dispositivo com `umount /backup` 
+
+4 passo, checagem se desmontou com `df -h` 
+
+5 passo, ajuste de features 
+
+6 passo, passagem de features `tune2fs -O extents,uninit_bg,dir_index /dev/sdb2` (comando para migracao de ext3 > ext4)
+
+7 passo, mudar o arquivo fstab `vim /etc/fstab` de ext3 para ext4.
+
+8 passo, montar novamente com `mount -a`
+
+9 passo, chacagem de arquivos com as ferramentas de integridade.
