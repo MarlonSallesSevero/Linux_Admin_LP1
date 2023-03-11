@@ -1,0 +1,75 @@
+*Gereciador de Pacotes no Debian*
+
+Temos 2 gerenciadores, o de alto nivel e o de baixo nivel. 
+
+-apt : Alto nivel, utiliza repositorios. 
+       Este diretorios, ficam dentro de /etc/apt/sources.list 
+       Vamos ter as linhas do repositorio principais, seguranca e outros. 
+       
+       deb https : pacotes .deb pre-compilados 
+       deb-src   : codigo fonte
+
+       Toda districuicao recebe um nome referenciado o toyStory
+       *Podemos adicionar novos repositorios.
+
+       apt update : faz a atualizacao da lista do que tem no repositorio com a sua maquina. 
+
+       apt list --upgradable : mostra somente o que precisa ser atualizado
+       
+       apt list : lista todos pacotes instalados na maquina. 
+       
+       apt upgrade : atualiza os pacotes da sua maquina. 
+
+       apt show pacote : Mostra um pequeno resumo para que serve o pacote e suas dependencias.
+
+       apt search *network : buscamos todos os pacotes que tem network relacionado, comando usado para procura de pacotes quando nao sabemos o nome.
+
+       apt install pacote1 pacote2 pacote3 -y : realiza a instalacao dos pacotes, podemos fazer isso com mais de 1 pacote.
+
+       apt remove pacote : realiza a remocao do pacote, porem nao as dependencias. Porem arquivos alterados continuam na maquina 
+
+       apt remove --purge :  realiza a remocao do pacote, porem nao as dependencias. Porem arquivos alterados tambem sao removidos da maquina.
+
+       apt download iftop : realiza a instalacao do pacote .deb que e o pacote ja pre-compilado.
+
+       apt clean : realiza a limpeza do cache 
+
+*Instalacao / execucao de um programa a partir do codigo fonte.
+
+       cd /opt 
+       apt source pacote : Realiza o download do codigo fonte do pacote. 
+       cd pacote_codigo_fonte : entrar dentro da pasta do pacote 
+       apt build-dep htop : realiza a instalacao das depencias do pacote. 
+       ./configure 
+       make 
+       make check 
+       make install        
+       **depois disso podemos usar o pacote na teoria.
+
+-dpkg : Baixo Nivel 
+
+        dpkg -l pacote : traz se o pacote esta instalado ou nao. 
+        
+        dpkg -i nome_pacote.deb : realiza a instalacao de pacotes .deb pre-compilados.
+        
+        dpkg -L nome_pacote : traz quais sao os arquivos que compoem esse pacote. E o local onde eles estao. 
+        
+        dpkg -s pacote : mostra o status do pacote.
+        
+        dpkg -r pacote : realiza a remocao do pacote.
+
+        apkg -S /bin/ls : Utilizado para sabermos qual pacote esta presente o ls. Para outros pacotes, como se fosse uma engenharia reversa.
+
+        dpkg -C pacote : mostra os problemas de integridade do pacote. 
+
+*Conversao de arquivo .rpm -> .deb ou .deb > .rpm 
+
+       CentOs trabalha com pacotes pre-compilados do tipo .rpm 
+
+       Sempre existe um risco, quanto mais complexo o programa.
+
+       apt install alien build-essential -y 
+       alien -r iftop pacote.deb : Realiza a conversao de deb para rpm 
+
+
+
