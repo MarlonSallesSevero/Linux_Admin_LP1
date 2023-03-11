@@ -1,0 +1,14 @@
+"Gerenciamento de Bibliotecas e Modulos "
+
+Sao pequenos trechos de codigo / Programa. O que diferencia é a necessidade.
+
+Podemos ter bibliotecas compartilhadas.
+
+ldd /bin/comando: exibe as bibliotecas vinculada a algum comando.
+
+biblioteca.so.1 = arquivo de biblioteca
+
+Se nao fosse ncontrado : not fould.
+
+ldconfig -p : cache do caminho de cada biblioteca.
+
