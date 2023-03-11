@@ -50,6 +50,8 @@ Temos 2 gerenciadores, o de alto nivel e o de baixo nivel.
 
         dpkg -l pacote : traz se o pacote esta instalado ou nao. 
         
+       dpkg -la : tudo instalado
+
         dpkg -i nome_pacote.deb : realiza a instalacao de pacotes .deb pre-compilados.
         
         dpkg -L nome_pacote : traz quais sao os arquivos que compoem esse pacote. E o local onde eles estao. 
@@ -58,7 +60,7 @@ Temos 2 gerenciadores, o de alto nivel e o de baixo nivel.
         
         dpkg -r pacote : realiza a remocao do pacote.
 
-        apkg -S /bin/ls : Utilizado para sabermos qual pacote esta presente o ls. Para outros pacotes, como se fosse uma engenharia reversa.
+        apkg -S /bin/arq_bin : Utilizado para sabermos qual pacote esta presente o bin. Para outros pacotes, como se fosse uma engenharia reversa.
 
         dpkg -C pacote : mostra os problemas de integridade do pacote. 
 
