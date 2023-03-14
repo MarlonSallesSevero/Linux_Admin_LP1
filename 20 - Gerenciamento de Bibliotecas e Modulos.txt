@@ -4,7 +4,7 @@ Sao pequenos trechos de codigo / Programa. O que diferencia é a necessidade.
 
 Podemos ter bibliotecas compartilhadas.
 
-ldd /bin/comando: exibe as bibliotecas vinculada a algum comando.
+ldd /bin/comando: exibe as bibliotecas vinculada a algum programa.
 
 biblioteca.so.1 = arquivo de biblioteca
 
@@ -12,3 +12,50 @@ Se nao fosse ncontrado : not fould.
 
 ldconfig -p : cache do caminho de cada biblioteca.
 
+Adicionando um novo diretorio de bibliotecas, basta criar um arquivo.
+    
+mkdir /bibliotecas (cria o diretorio que vai armazenar as bibliotecas)
+cd /etc/ld.so.conf.d/ (entra na pasta)
+vim bibliotecas.conf (cria o arquivo, tem que ter a extensao .conf)
+    /diretorio (dentro do arquivo,/biblioteca)
+
+Podemos declarar uma nova variavel de ambiente.
+
+export LD_LIBRARY_PATH=/opt
+       |--------------|
+        nome da variavel de ambiente utilizada pra voce definir caminho de diretorio para
+        armazenamento de biblioteca.
+        ps.Temporario.
+
+ -------------------------------------------------------------------------------------------------
+
+
+Modulos do Kernel 
+
+nucleo central, a imagem do kernel fica no /boot
+
+Kernel + Modulos = tras a funcionalidade de varios drivers / SO em si 
+
+lspci -k : lista todos os dispositivos pci e as versao do modulo do kernel deles para eles funcionarem. 
+
+exeplo de modulos : ahci, ext4,rfkill,cdrom 
+
+lsmod : lista todos os modulos no momento carregado
+
+    lsmod |wc -l: faz a contagem. 
+
+modinfo modulo : tras uma serie de informacoes referente ao modulo. 
+
+rmmod modulo: remocao do modulo
+
+depmod: varredura em todos os arquivos .ko 
+    e depois vai guardar e cria um arquivo para ser usado pelo cache, fica em /lib/modules/versao_kernel/modules.dep
+    importate para recarregar modulos.
+
+/lib/modules/kernel_version_kernel/kernel
+**Geralmente os arquivos de modulo sao com a extensao ' .ko '. 
+
+insmod /caminho_do_modulo_completo: inicializacao do modulo. (nao mt bom)
+modprobe nome_modulo : carrega o modulo a partir do  /lib/modules/versao_kernel/modules.dep, ex  modprobe e1000
+
+**A carga dos modulos na inicializacao sao de maneira dinamica com base no hardware.
