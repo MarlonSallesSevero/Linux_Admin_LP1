@@ -1,0 +1,99 @@
+Processos : Eventos internos do sistema.
+
+Evento / Processo{
+    Quem iniciou
+    PID (Process Indentification)
+    Qual Terminal
+    Processamento/memoria
+    Estado
+}
+
+Systemd -> Principal processo em execucao no linux
+
+PS
+    ps -aux -> Traz uma listagem de todos os processos 
+
+    USER PID %CPU %MEM VSZ RSS TYY STAT START TIME COMMAND 
+
+    Ss - sleeping -> parado 
+    Rr - running  => em execucao 
+
+    ls /proc -> traz o armazenamento dos processos 
+
+    ps -aux | more -> traz pausadamente os processos em execucao.
+
+    ps -aux | grep bash -> podemos realizar filtragens de processos, no exemplo o `bash`.
+
+
+    Temos varios exemplos no -> man ps
+    ex. ps axjf -> traz em forma de arvore.
+
+    ps -u usuarioX -> traz todos os processos de um determinado usuario
+
+PGREP
+    pgrep -a bash (menos info) podemos realizar filtragens de processos, no exemplo o `bash`.
+    pstree -p -> Traz em forma de arvore, mt bom utilizar.
+
+PIDOF
+    Traz o id de um determinado programa/processo.
+    ex. pidof top 
+
+TOP e HTOP
+    Mostra de forma interativa, o status dos processos.
+    Podemos alterar o delay, clicando a letra `D`.
+    P - ordena por processador
+    M - ordena por memoria
+    > e < navega entre os processos.
+    L - Localiza por palavra 
+    Z - Altera as cores.
+    k - mata um processo, informando o PID
+    
+Finalizando Processo:
+
+    KILL - utilizado para mandar sinais de execucao de atividade. 
+
+    kill -l -> lista quais sinais podemos usar. 
+        principais:
+            15 -> SIGTERM : PADRAO, finaliza o processo da maneira 'correta'.
+            09 -> SIGKILL : Mata o processo independente de qualquer coisa.
+            03 -> SIGQUIT : Sai do processo, igual ao ctrol + c
+    
+    pidof top
+    kill -9 19551 -> Utilizamos esses parametros para matar o processo.
+    
+    kill -19 19551 -> realiza o sigstop do processo, para ele.
+        kill -18 19551 -> volta pra execucao.
+    
+    pkill -9 top 
+
+    killall -9 top 
+    
+--TAREFAS NO SEGUNDO PLANO 
+
+>> subonhamos q esteja no meio de uma edicao com vim.
+    > basta clicar ctrol + alt + Z
+    > jobs -> verifica as tarefas em segundo plano.
+    > fg 1 volta pra edicao vim 
+    > fg %2 volta pra edicao do 2 vim 
+
+nohup -> Continua executando um programa msm com o terminal fechado.
+    ex. nohup ping -c 200 192.168.0.1      
+    tail -f nohup.out 
+
+--Prioridade. 
+
+nice -> qual prioridade queremos iniciar o programa.
+
+-20 -> Super Alta 
+0 -> normal
+19 -> baixa
+
+ex. nice -n -20 vim doc.txt  
+
+Mudando a prioridade durante execucao.
+
+pidof vim 
+renice -n 20 -p 19856
+
+
+
