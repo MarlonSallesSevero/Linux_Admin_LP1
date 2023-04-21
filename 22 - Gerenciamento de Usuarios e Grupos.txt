@@ -1,0 +1,99 @@
+useradd
+usermod
+userdel 
+passwd 
+groupdel 
+groupmod 
+
+Usuarios
+
+    getent passwd -> base de dados de usuarios.
+    getent shadow -> mostra as senhas
+
+    /etc/passwd ->usuarios
+    /etc/shadow -> senhas e politicas de senha 
+
+A maioria das contas no passwd sao contas de servicos.
+
+Grupos
+
+    getent group -> base de dados de grupos.
+    getent gshadow -> adiciona senha no grupo
+
+    /etc/group 
+    /etc/gshadow 
+
+-----------------------------------------------------
+Adicionando usuarios
+
+adduser nome_usuario
+*Todo usuario faz parte de um grupo primario. Se nao declarado o linux 
+cria um grupo por conta propria. Msm nome do usuario
+/home -> Diretorio pessoal do usuario 
+/etc/skel -> copia dos Arquivos Defaults 
+
+getent passwd teste
+
+teste:x:1001:1001,,,/home/teste:/bin/bash
+nome    UID  GID    home          shell
+
+getent shadow teste
+
+teste:askkdaskkaskdakdadkad:19459:0:99999
+teste:senha_hash_sha:data_ultima_alteracao:tempo_senha_minimo:tempo_maximo:dias_antes_vencer_aviso:::
+
+chage -l teste : infos mais simplificadas
+
+criando politica especifica de senha para o usuario teste :
+
+-> chage teste : Podemos realizar a configuracao
+
+vim /etc/login.defs -> configs de usuario da maquina
+------------------------------------------------------------
+**Exclusao**
+
+userdel -r teste : realiza a exclusao do usuario e do /home dele.
+groupdel g_ti : realiza a exclusao do grupo (se usuarios vinculados no primario nao exclui)
+-------------------------------------------------------------
+
+Modulos PAM : Configs avancadas de senha.
+    UID -> Numero de indentificao do usuario.
+-----------------------------------------------------------
+Adicionando grupos
+    groupadd g_ti
+----------------------------------------------------------
+
+Modificando:
+
+    usermod -> realiza as alteracao no usuario
+
+    ex: usermod -g g_diretoria joao.
+
+    groupmod : realiza alteracao no grupo
+        ex. groupmod -m g_tecnologia g_ti 
+----------------------------------------------------------
+
+add membros no grupo.
+
+gpasswd --help
+    gpasswd -a root g_tecnologia
+
+removendo usuario gropo.
+    gpasswd -d root g_tecnologia
+---------------------------------------------------------
+
+vipw : permite editar arquivo passed
+vipw -S : permite editar arquivo shadow
+visudo : permite editar arquivo sudoers.
+vigr :  permite editar arquivo group.
+vigr : permite editar arquivo gshadow
+pwunconv : remove o arquivo shadow e leva a senha para o passwd 
+pwconv : pega a senha do passwd e retorna para o arquivo shadow. (info antigas nao existem mais)
+
+
+
+
+
+
+
+
