@@ -34,7 +34,7 @@ _____________________________________________________________________________
 Permissoes 
     r - Leitura (ler o que esta dentro do arquivo)
     w - escrita (alterar o conteudo dele)
-    x - execucao (binarios/scripts)
+    x - execucao (executar o arquivo, binarios/scripts)
 
 *modo literal/textual  
         u > dono
@@ -66,7 +66,7 @@ Permissoes
     0 + 0 + 0 = remocao de todas
     
     
-    ex1. chmod 7 arq.txt -v >> permissao total para outros.
+    ex1. chmod 007 arq.txt -v >> permissao total para outros.
     ex2. chmod 700 arq.txt -v >> permisao total para o dono 
     ex3. chmod 660 arq.txt -v >> leitura e escrita para dono e grupo, nada para outros.
     ex4 . chmod 777 arq.txt -v >> permissao total para todo mundo.
@@ -76,3 +76,23 @@ ps. se nao colocar ele vai 00 a esquerda.
 *Permissionamento para Diretorios*
 
 
+>> A permissao PADRAO que de todo diretorio que e criado: drwrxr-xr-x 
+
+d - diretorio
+r - Leitura (Permite LISTAR o conteudo do diretorio)
+w - Escrita (Modificar um conteudo do diretorio, REMOVER ou ADICIONAR ARQUIVOS). Principal Permissao. 
+x - Execucao (Permissao de execucao, permite ENTRAR ou NAO ENTRAR no diretorio.) ex. cd /diretorio
+
+***O Permissionamento nao tem uma heranca com os arquivos dentro do diretorio. 
+
+Podemos fazer isso de maneira recursiva.
+
+chmod -R 777 /diretorio -v >> vai aplicar o Permissionamento no diretorio e nos arquivos dentro dele.
+
+--------------------------------------
+
+TROCANDO DONO OU GRUPO DE UM ARQUIVO
+
+chown analista:root arq.txt >>  realiza a alteracao do dono ou do grupo.
+
+chgrp g_suporte:root arq.txt >> realiza a alteracao do grupo
