@@ -96,3 +96,4 @@ TROCANDO DONO OU GRUPO DE UM ARQUIVO
 chown analista:root arq.txt >>  realiza a alteracao do dono ou do grupo.
 
 chgrp g_suporte:root arq.txt >> realiza a alteracao do grupo
+.
