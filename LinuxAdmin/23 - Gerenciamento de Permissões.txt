@@ -137,6 +137,9 @@ TROCANDO DONO OU GRUPO DE UM ARQUIVO
     Aplicando : aplicando ao grupo a permissao do sgid bit.
             chmod g+s dados -v
 
+      removendo : removendo do diretorio a permissao do sgid bit.
+        chmod g-s /tmp/ -v
+
 
     **PORQUE ATIVAR ESSA PERMISSAO? >> aplicado ao diretorio para forcar o grupo ser o grupo do conteudo dentro do diretorio.
     Como se fosse uma heranca.
@@ -154,8 +157,10 @@ TROCANDO DONO OU GRUPO DE UM ARQUIVO
     Qualquer usuario logado.
 
     Aplicando : aplicando ao arquivo a permissao do suid bit.
-
     chmod u+s /usr/bin/cat 
+
+    removendo : removendo do diretorio a permissao do suid bit.
+    chmod u-s /usr/bin/cat 
 
     ps. Perigoso usar, tem que ter uma analise. Podemos buscar arquivos que tem essa permissao
     habilitada. 
