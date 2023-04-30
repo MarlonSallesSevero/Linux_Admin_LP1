@@ -71,29 +71,95 @@ Permissoes
     ex3. chmod 660 arq.txt -v >> leitura e escrita para dono e grupo, nada para outros.
     ex4 . chmod 777 arq.txt -v >> permissao total para todo mundo.
 
-ps. se nao colocar ele vai 00 a esquerda.
+    ps. se nao colocar ele vai 00 a esquerda.
+
+--------------------------------------
 
 *Permissionamento para Diretorios*
 
 
 >> A permissao PADRAO que de todo diretorio que e criado: drwrxr-xr-x 
 
-d - diretorio
-r - Leitura (Permite LISTAR o conteudo do diretorio)
-w - Escrita (Modificar um conteudo do diretorio, REMOVER ou ADICIONAR ARQUIVOS). Principal Permissao. 
-x - Execucao (Permissao de execucao, permite ENTRAR ou NAO ENTRAR no diretorio.) ex. cd /diretorio
+    d - diretorio
+    r - Leitura (Permite LISTAR o conteudo do diretorio)
+    w - Escrita (Modificar um conteudo do diretorio, REMOVER ou ADICIONAR ARQUIVOS). Principal Permissao. 
+    x - Execucao (Permissao de execucao, permite ENTRAR ou NAO ENTRAR no diretorio.) ex. cd /diretorio
 
-***O Permissionamento nao tem uma heranca com os arquivos dentro do diretorio. 
+    ***O Permissionamento nao tem uma heranca com os arquivos dentro do diretorio. 
 
-Podemos fazer isso de maneira recursiva.
+    Podemos fazer isso de maneira recursiva.
 
-chmod -R 777 /diretorio -v >> vai aplicar o Permissionamento no diretorio e nos arquivos dentro dele.
+    chmod -R 777 /diretorio -v >> vai aplicar o Permissionamento no diretorio e nos arquivos dentro dele.
 
 --------------------------------------
 
 TROCANDO DONO OU GRUPO DE UM ARQUIVO
 
-chown analista:root arq.txt >>  realiza a alteracao do dono ou do grupo.
+    chown analista:root arq.txt >>  realiza a alteracao do dono ou do grupo.
 
-chgrp g_suporte:root arq.txt >> realiza a alteracao do grupo
-.
+    chgrp g_suporte:root arq.txt >> realiza a alteracao do grupo
+
+    stat arquivo.txt : Mostra uma serie de informacoes referente ao arquivo
+
+--------------------------------------
+
+*Permissoes Especiais*
+
+0700 : O 0 e um conjunto de permissoes especiais. Sao 3 permissoes, para funcoes especificas.
+        4 : suid bit 
+            (s) aplicado ao dono
+        2 : sgid bit 
+            (s) aplicado ao grupo
+        1 : stick bit 
+            (t) aplicado a outros
+
+* 1 : stick bit >> usado em diretorios temporarios. 
+    t - minusculo >> (t + x )outros tem aplicado 
+    T - maiusculo >> (t - x )outros nao tem aplicado
+
+    aplicando : aplicando ao diretorio a permissao do stick bit.
+        chmod o+t /tmp/ -v
+
+    removendo : removendo do diretorio a permissao do stick bit.
+        chmod o-t /tmp/ -v
+
+    **PORQUE ATIVAR ESSA PERMISSAO? Usado pois qualquer usuario tem acesso ao diretorio temporarios. 
+    Aplicando nesse diretorio, so e possivel apagar o arquivo quem for o dono dele. 
+    Independente, de permissao.
+
+    RESUMO : PROTEGE PARA SOMENTE O DONO REALIZAR REMOCAO DE ARQUIVOS.
+
+
+* 2 : sgid bit >> Aplicado a diretorios, para criar uma herencao de grupo dono.
+    s - minusculo >> (s + x ) grupo tem aplicado 
+    S - maiusculo >> (S - x ) grupo nao tem caplicado
+
+    Aplicando : aplicando ao grupo a permissao do sgid bit.
+            chmod g+s dados -v
+
+
+    **PORQUE ATIVAR ESSA PERMISSAO? >> aplicado ao diretorio para forcar o grupo ser o grupo do conteudo dentro do diretorio.
+    Como se fosse uma heranca.
+
+    ps. Somente para os novos arquivos, muito usado em fileserver.
+
+*4 : suid bit >> Aplicado a arquivos.
+
+    Temos que ter cuidado com programas que tem o suid bit, pois ele pode trazer riscos operacionais para  
+    o sistema. Dependendo da onde voce esteja implementando eles. 
+        s - minusculo >> (s + x ) dono tem execucao 
+        S - maiusculo >> (S - x ) dono nao tem execucao
+
+    **PORQUE ATIVAR ESSA PERMISSAO? Realiza a execucao do dono do programa dele, e nao mais o usuario indentificado na maquina.
+    Qualquer usuario logado.
+
+    Aplicando : aplicando ao arquivo a permissao do suid bit.
+
+    chmod u+s /usr/bin/cat 
+
+    ps. Perigoso usar, tem que ter uma analise. Podemos buscar arquivos que tem essa permissao
+    habilitada. 
+
+    ex. find / -type f -perm /4000 2> /dev/null 
+
+nosuid : Na montagem do disco, podemos colocar nosuid para criar a particao para nao ter suid la dentro.
