@@ -1,0 +1,44 @@
+Shell Script : Linguagem interpretativa.
+
+A ordem importa, leitura realizada de cima para baixo. (top down).
+
+*Criacao de variaveis de ambiente*
+
+touch file.sh
+chmod a+x file.sh
+vim file.sh
+
+1 linha - Qual sera o shell que ira interpretar o seu script. Chamada do interpretador.
+#!/bin/bash (shebang)
+
+* Declaracao de variaveis estaticas: (SEM ESPACO S) *
+    
+    ex. VAR1=10
+   
+    ex2. VAR2=texto
+   
+    ex3. VAR3="O texto tem espaco"
+   
+    ex4. VAR4=/tmp 
+   
+    ex5. SCRIPTNAME=/etc/init.d/"$NAME"
+
+* Chama de Variavel : Chamamos com '$' *
+
+    $NOME_VARIAVEL
+   
+    ex1. VAR5="O conteudo da var 4 e $var4" 
+   
+    ex2. VAR6=$VARIAVEL_SISTEMA
+   
+    ex3. VAR7=$(comando) **ta recebendo como conteudo o programa do comando ex. pwd.
+    Vai armazenar o resultado na variavel.(subshell)
+    ou tambem podemos fazer com crase : VAR8=`pwd`
+
+
+
+
+
+    ps. env >> mostra as variaveis globai no sistema. 
+
+
