@@ -2,6 +2,7 @@ Shell Script : Linguagem interpretativa.
 
 A ordem importa, leitura realizada de cima para baixo. (top down).
 
+----------------------------------------------------------------------------------------
 *Criacao de variaveis de ambiente*
 
 touch file.sh
@@ -35,10 +36,77 @@ vim file.sh
     Vai armazenar o resultado na variavel.(subshell)
     ou tambem podemos fazer com crase : VAR8=`pwd`
 
-
-
-
-
     ps. env >> mostra as variaveis globai no sistema. 
 
+* ENTRADA DE DADOS 
+
+ex1. read NOME_VARIAVEL
+ex2. read -p "READ COMANDO PARA CAPTURA, -p JA ARMAZENA" NOME_VARIAVEL
+ex3. read -s -p "-s UTILIZADO PARA SENHAS" SENHA_VAR
+ex4. echo -e "\n$NOME_VARIAVEL"
+ex5. echo -e "\n$SENHA"
+
+ps. bash -x script.sh (debug)
+
+#Variaveis especiais
+
+echo "nome do arquivo $0"
+echo "primeiro parametro $1"
+echo "segundo parametro $2"
+echo "numero de parametros $#"
+echo "return code do ultimo comando com sucesso $?"
+ppp
+echo "return code do ultimo comando com sucesso $?"
+
+*return code : 
+    0 = sucesso
+    !0 = fail 
+
+------------------------------------------------------------------------------------------------------------
+
+*Funcoes*
+
+help function : traz uma ajuda para a declaracao de funcao.
+
+function NOME {COMANDOS ; } ou NOME () { COMANDOS ;} 
+
+function menu {
+    echo "Digite 1 para somar" 
+    echo "Digite 2 para substrair" 
+    echo "Digite 3 para sair" 
+    read OPCAO
+}
+ 
+
+ valores(){
+    echo "Digite o primeiro valor" 
+    read VLR1
+    echo "Digite o segundo valor" 
+    read VLR2
+ }
+
+  somar(){
+    valores //CHAMA A FUNCAO VALORES
+    echo "A soma dos valores e $(($VLR1+VLR2))"
+ }
+
+   substracao(){
+    valores //CHAMA A FUNCAO VALORES 
+    echo "A substracao dos valores e $(($VLR1-VLR2))"
+ }
+
+
+****Chamando funcoes ****
+
+ex. Em um arquivo .bash podemos chamar o local onde a funcao esta salva.
+
+#!/bin/bash
+
+*1 modo : source
+
+source /usr/local/bin/scripts/funcoes.sh
+
+*2 modo : ponto espaco 
+
+. /usr/local/bin/scripts/funcoes.sh
 
