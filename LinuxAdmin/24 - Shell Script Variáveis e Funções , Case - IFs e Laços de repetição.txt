@@ -110,3 +110,37 @@ source /usr/local/bin/scripts/funcoes.sh
 
 . /usr/local/bin/scripts/funcoes.sh
 
+------------------------------------------------------------------------------------------------------------
+
+Case - Utilizado para criamos condicoes.
+
+help case 
+
+case VARIAVEL in 
+    PADRAO1)
+    COMANDOS 
+;;
+esac 
+
+
+. /usr/local/bin/scripts/funcao.sh
+
+menu 
+
+EX. case $OPCAO in
+        1 | 01)                            //condicao (| = ou )
+            somar                         //opcao
+            ;;                           //break
+        2)  
+            substrair
+            ;;
+        0) 
+            exit
+            ;;
+        *)                                   //qualquer outra opcao
+            echo 'Digite uma opcao valida.'
+            ;;
+    esac                                    //finalizando case com a palavra ao contrario.
+
+
+
