@@ -144,3 +144,120 @@ EX. case $OPCAO in
 
 
 
+
+
+
+ps. Realizando teste
+
+test ou []
+
+help test 
+
+* File operator
+* String Operators 
+* Other Operators
+
+
+exemplo.
+
+[ -d /tmp ]                   //teste se o arquivo e um diretorio. Podemos definir condicionais em qualquer elemento.
+[ -x /bim/ls ]                  //testa se o arquivo e executavel.
+test -f $variavel               //testa se e um arquivo existente/comum
+[ -r  /etc/defaults/cron ]      //permissao de leitura
+if [-z "$varivel" -a -e /etc/arquivo]
+$OPCAO -eq 1 
+$OPCAO -ne 2 
+$OPCAO -gt 3 
+
+----------------------------------------------------------------------------------------------------
+
+*CONDICOES* 
+
+exemplo :
+
+. /usr/local/bin/scripts/funcoes.sh 
+menu 
+
+if [ $OPCAO -eq 1 ]; then 
+    somar 
+elif [ $OPCAO -eq 2 ]; then 
+    subtrair 
+elif [ $OPCAO -eq 0 ]; then
+    exit 
+else 
+    echo "Digite uma opcao valida!"
+fi 
+
+
+ps. texto utilizamos =
+
+----------------------------------------------------------------------------------------------------
+
+*LACOS DE REPETICAO* 
+
+Enquanto verdadeiro continua dentro do laco.
+
+exemplo : 
+
+while [ $OPCAO -ne 0]; do 
+. /usr/local/bin/scripts/funcoes.sh 
+menu 
+
+if [ $OPCAO -eq 1 ]; then 
+    somar 
+elif [ $OPCAO -eq 2 ]; then 
+    subtrair 
+elif [ $OPCAO -eq 0 ]; then
+    exit 
+else 
+    echo "Digite uma opcao valida!"
+fi 
+
+sleep 10                  //agurda 10s
+clear                   //limpa tela
+    menu                    //chama menu novamente 
+
+done                    //finaliza 1 execucao do laco. 
+
+*FOR*
+
+exemplo 1.
+
+for lista 
+    in 
+        joao maria gabriel tereza; 
+    do 
+        echo "Teste $lista"; 
+done
+
+exemplo 2.
+
+for lista 
+    in 
+        joao maria gabriel tereza; 
+    do 
+        useradd -m -d /tmp/$tmp/$lista $lista;
+    done
+done
+
+exemplo 3.
+
+for lista in joao pedro gabriel tereza; do userdel -r $lista ; done 
+
+
+----------------------------------------------------------------------------------------------------
+
+LINKS / ATALHOS
+
+ps. linksimbolicos 
+    -hardlink 
+    -softlink 
+como criar ? 
+
+*link simbolico / softlink
+    ln -s /usr/local/bin/scripts/  /scripts 
+
+*link diretorio / hardlink
+    ln arq01.txt arq2.txt                              ps.se alterar um, altera outro. 
+    
+
