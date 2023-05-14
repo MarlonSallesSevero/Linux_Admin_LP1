@@ -1,0 +1,107 @@
+****** Systemd ******
+
+        E uma gerenciador de servicos,sockets, devive units, swap montagem, timer, target, utilizacao de servers. 
+        E muito mais. Um canivete suico no linux.  
+
+    ps. Veio pra substituir init, SysV, upstart. 
+
+        man systemd 
+
+    Systemd e o gerencidor porem utilizamos o systemctl para gerenciar.
+
+        man systemctl 
+        Para vermos as units podemos rodar um systemctl list-unit 
+
+
+    exemplo 1.
+        systemctl list-units --type automount 
+
+    exemplo 2.
+        systemctl list-units --type service 
+
+    
+    exemplo 3.
+        systemctl list-unit-files --type service               //traz a info referente a \
+
+        enable - habilitado
+        mask - mascarado  (servico nao utilizado no momento, podendo depender de outro. Se estiver nesse estado nao pode ser utilizado. A nao ser que tire a mascara)
+        static - estatico (defaults)
+        alias - apelidos 
+        disable - desabilitado 
+        static e enable - vao ser inicializados ao ligar a maquina. 
+
+
+    exemplo 4.
+        systemctl list-unit-files --type service  --state enabled 
+
+
+    //Como desabilitar um servico da inicializacao.
+
+        ex1. systemctl disable cups 
+        ex2. systemctl disable cups cups-browsed.service 
+
+
+    //Como habilitar um servico da inicializacao.
+
+        ex1. systemctl enable cups 
+
+
+    //Checagem se o servico esta na inicializacao.
+
+        ex. systemctl is-enable cups 
+        ex2. systemctl is-active cups
+
+
+    //Bloqueando um servico para nao ser utlizado - Mascarando
+
+        systemctl stop  cups
+        systemctl disable cups 
+        systemctl mask cups
+
+
+    // Tirando a mascara
+
+        systemctl un mask cups
+
+
+    reload -- Recarrega as config sem parar o servico. 
+
+        ex. systemctl reload appamor.service
+
+
+    Status - Traz uma previa de log filtrado 
+
+
+*** Targets ***
+
+    man runlevel - foi substituido por esse cara.
+
+    0  =  poweroff.target 
+    1  =  rescue.target
+    5  =  graphical.target 
+    ...
+
+    systemctl get-default    //traz o runlevel default >> graphical.target 
+    systemctl set-default multi.user.target   //deixando somente em modo texto.
+    systemctl set-default graphical.target
+
+    Podemos mudar o runlevel em tempo de execucao.
+
+    ex. systemctl reboot ou telinit 6
+        telinit chama o runlevel 6.
+
+    ex2 . telinit 3 - tira o ambiente grafico em tempo de execucao.
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ---- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+****** Encryption ******
+
+Gerenciador de Encriptacao. 
+
+apt install cryptsetup -y 
+
+Primeiro realizamos a encryption, quando queremos que a particao seja encriptada. 
+
+cryptsetup --help 
+
+
