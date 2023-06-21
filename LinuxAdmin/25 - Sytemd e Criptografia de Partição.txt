@@ -102,6 +102,57 @@ apt install cryptsetup -y
 
 Primeiro realizamos a encryption, quando queremos que a particao seja encriptada. 
 
-cryptsetup --help 
+    cryptsetup --help 
+
+    -c, --cipher=STRING >> cifra usada para criptografar o disco (veja /proc/crypto)
+
+    -y, --verify-passphrase >> Verefica a senha perguntando duas vezes.
+
+    -s, --key-size=BITS >> quantidade de bits utilizada
+
+    *Comando para criptografar com key tamanho 256.
+        cryptsetup -y --cipher aes-essiv:sha256 --key-size 256 luksFormat /dev/sdc1 
+
+    Podemos ver isso dando um >> blkid /dev/sdc1
+
+    ps. Nao podemos realizar a formatacao do sdc1 se vamos perder a encryptacao.
+
+Assim para criarmos o disco para utilizar, sobre a camada da encryption precisamos criar um volume. (Device Mapper) MD
+
+    //Para abrir o dispositivo encriptado, associamos o dispositivo a um volume com o comando abaixo.
+        cryptsetup luksOpen /dev/sdc1 crypt                      
+
+    //Podemos fechar novamente com o Comando abaixo.
+         cryptsetup luksClose crypt 
+
+    E utilizar em momentos especificos dando um luksOpen.
+
+Apos criar o vinculo realizamos a formatacao.
+        mkfs -t xfs /dev/mapper/crypt 
+        xfs_admin -L crypt /dev/mapper/crypt
+E a montagem do disco. 
+        mkdir /data 
+        mount /dev/mapper/crypt     /data/
+       
+ Podemos utilizar e depois desmontar com umount para seguranca e depois um luksClose
+    ps. os arquivos nao se perdem, so retiramos o vinculo. Depois de utilizar, podemos realizar o luksClose. 
+    Se quiser usar novamente, damos um luksOpen /dev/sdc1 crypt e depois montar com mount /dev/mapper/crypt /data
+
+
+* Automatizando *
+
+ vim /etc/cryptab  //faz a tratativa de arquivos encriptados
+
+ ** Arquivo proprio para encriptacao. Consegue tratar arquivos encriptados. Para deixar essa montagem automatica, fazemos dessa maneira:
+
+<target name> <source device> <key file> <options>
+
+crypt           /dev/sdc1         none      luks
+
+Quando iniciarmos, o sistema operacional ja vai solicitar a senha. 
+
+cryptdisks_start crypt >> ele vai ler o arquivo, e vai tentar fazer o luksOpen. Solicita a senha.
+cryptdisk_stop crypt >> realiza a parada da usabilidade do disco.
+
 
 
