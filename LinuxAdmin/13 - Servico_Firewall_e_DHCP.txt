@@ -10,3 +10,7 @@ ps.rever firewall
 1 passo - instalar o servico de dhcp
 -yum install dhcp-server -y 
 -cd /etc/dhcp
+
+systemctl enable dhcpd
+systemctl restart dhcpd
+tail -f /var/log/messages 

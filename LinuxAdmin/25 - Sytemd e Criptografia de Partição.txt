@@ -154,5 +154,15 @@ Quando iniciarmos, o sistema operacional ja vai solicitar a senha.
 cryptdisks_start crypt >> ele vai ler o arquivo, e vai tentar fazer o luksOpen. Solicita a senha.
 cryptdisk_stop crypt >> realiza a parada da usabilidade do disco.
 
+****
 
+Podemos gerar um arquivo com a chave de senha, fazendo o sistema operacional iniciar sem solicitar a senha.
+Porem precisamos ter cuidado com quem vai ter acesso a essa chave. 
+Logo depois de criado vamos colocar no campo <key file> no fstab. 
+
+1) dd if=/dev/urandom of=/var/filecrypto bs=4096 count=1 (criando arquivo com dd, usando urandom)
+
+2) chmod 0600 /var/filecrypto (alterando a config de permissao)
+
+3) cryptsetup luksAddKey /dev/sdc1 /var/filecrypto
 

@@ -1,1 +1,35 @@
-teste
+Autofs - Sistema de Automontagem. 
+
+Sistema para realizacao de montagem de disco / qualquer dispositivo.
+
+Vamos passar a instrucao para que toda vez que executarmos, cd /data/crypt vai disparar uma acao de montagem de maneira automatica.
+
+Instalacao do autofs.
+
+    apt install autofs -y.
+
+    
+Vamos deixar a montagem automatica ao entrar no /data/crypto com o autofs. 
+
+    Dentro de /etc/auto.master podemos realizar a configuracao.
+    Na linha 08 realizamos o apontamento do diretorio base para montagem. 
+    config >> /data   /etc/auto.crypt --timeout 30
+
+    Dentro do auto.crypto que vamos dizer como ele vai montar. Precisamos criar ele. 
+
+    No arquivo, escrevemos : 
+
+    crypt      -fstype=xfs,rw 	               :/dev/mapper/crypt 
+
+    |key word|  |system file, read / write|     |dispositivo, caminho montagem|
+
+Depois de sair e salva. Podemos reiniciar o servico autofs.
+
+systemctl restart autofs 
+systemctl enable autofs 
+
+Dessa maneira, toda vez que digitamos o cd /data/crypt ele realiza a Checagem da key e monta. 
+
+------------------------------------------------------------------------------------------
+
+OpenSSH 
