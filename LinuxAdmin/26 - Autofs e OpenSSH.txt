@@ -108,3 +108,7 @@ No arquivo /etc/ssh/sshd_config vamos habilitar o banner. Assim podemos colocar 
 Caso em algum momento voltarmos a conectar nessa maquina, vamos precisar especificar a porta por nao ser a padrao.
 
 ssh -p 52001 usuario@192.168.1.1
+
+ps. Em Debian precisamos realizar a instalacao do ssh com:
+    apt install openssh-server --fix-missing -y 
+    
