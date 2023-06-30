@@ -1,0 +1,53 @@
+**Firewall**
+
+Para trabalharmos bem com firewall temos que conhecer o firewall em si, conhecer bem de rede, 
+ter um conhecimento de servicos.
+
+Vamos utilizar o iptable services. 
+
+iptables -L : mostra as regras de firewall. 
+
+vim /sbin/firewall.sh (arquivo criado para definicao das regras no treinamento. Toda mudando feita precisamos executar o arquivo novamente.)
+
+No iptables, nos trabalhamos com 3 tabelas:
+    1 Tabela - filter (realiza a filtragem de pacotes input, output e forward).
+        input - entrada fw 
+        output - saida fw 
+        forward - passa pelo fw 
+    ps. quando nao definimos a tabela, ele pela filter de maneira automatica. 
+
+    -P : Policy (drop ou accept)
+    A politica padrao, e nao ter bloqueio. Ou seja accept. Porem podemos criar novas se necessario.
+
+    ex: 
+    
+    #Politicas padroes do firewall
+    iptables -P INPUT DROP
+    iptables -P OUTPUT DROP
+    iptables -P FORWARD DROP
+
+    2 Tabela - Nat (Network Address Translation)
+
+    Utilizado para realizarmos a mudanca de dados de um pacotes. 
+
+    3 Tabela - Mangle (Uma tabela especial)
+
+    Utilizado principamente para QoS (Quality of Services) . 
+    Podemos criar priotizacao de controles, controle de banda, validar protocolos e realizar a saida por um lugar diferente.
+
+    --------------------------------------------------------------
+
+    Exemplo de politica pra conexoes ssh. 
+
+    # 1 - Habilita o SSH do node Cliente Interno e Externo
+    iptables -A INPUT -p tcp --dport 52001 -j ACCEPT
+
+    Condicoes : 
+        -A : nova regra 
+        -p : protocolo 
+        --dport : porta     
+        -j : jump 
+
+    A primeira regra, criado sera levada como a vigente. Caso tenha uma bloqueando e outra liberando.
+    A digitada primeira sera levada em consideracao. 
+    
