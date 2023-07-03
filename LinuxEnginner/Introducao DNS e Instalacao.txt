@@ -1,0 +1,101 @@
+DNS - Domain Name System 
+
+Temos DNS Corporativos e Publicos. 
+
+    Ex. 8.8.8.8 --> Publicos 
+
+Quando trabalhamos com controladores de dominio, temos que necessariamente ter um DNS. 
+Logo, no mundo empresarial e quase que indispensavel um DNS Corporativo.
+
+porta 53 (UDP) : Conexao Utilizada para conexao com o servidor DNS. 
+
+Etapas para resolucao de nomes :
+
+1 Verificao : Cache de respostas de enderecamento.
+
+2 Verificao, Dominios auterentativos : Quais dominios o servidor DNS e responsavel. 
+
+3 verificacao : Busca recursivas, pelos root-servers (Por NS)
+
+
+**Implementacao do Servico de DNS S.O Debian utlizando CHROOT.**
+
+Intranet : DNS Master 
+DataCenter : DNS Slave 
+
+CHROOT {
+    Tem como objetivo de isolar o servico do DNS. Tudo relacionado ao DNS fica dentro de um
+    so lugar. Isso a nivel de diretorio e tambem a nivel de security. Evitando exploits. 
+}
+
+
+ps. processo em ambas as maquinas, master e slave. 
+
+1 PASSO - Instalacao do pacote de Implementacao do Servico, instalar em ambas as maquinas.{
+    apt update
+    apt install bind9 bind9utils dnsutils -y
+
+    -bind9 - Implementacao do servico
+    -bind9utils dnsutils - Ferramentas
+    -Bind tambem pode ser chamado de bind.service ou named.service. 
+    -Os arquivos de config do bind9 ficam em /etc/bind. 
+    -Arquivos de zona, ficam em /var/cache/bind/
+
+    Esses sao os diretorios, padroes apos a instalacao do bind. Porem como vamos utilizar o conceito CHROOT.
+    }
+
+2 PASSO - Escolher um diretorio para a implementacao do CHROOT.{
+
+    mkdir -pv /var/bind9/chroot/{etc,dev,var/cache/bind,var/run/named}
+
+    Principal diretorio do DNS.
+
+    /var/bind9/chroot/etc : config files
+    /var/bind9/chroot/dev : devices  
+    /var/bind9/chroot/var/cache/bind : zone files 
+    /var/bind9/chroot/var/run/named
+}
+
+3 PASSO - APONTANDO ESTRUTURA PARA O NOVO DIRETORIO. {
+
+    vim /etc/default/named
+
+    Vamos mudar os parametros de inicializacao em 'OPTIONS' para a linha abaixo.
+
+    OPTIONS="-u bind -t /var/bind9/chroot"
+        -t : target 
+
+    Apos reiniciar o servico, ele vai atualizar o apontamento. 
+
+}
+
+4 PASSO - Atualizar o servico do apparmor{
+
+apparmor : Servico mandandatorios, ele tem como objetivo trazer uma protecao a mais. 
+Podemos ver o status dele com 'aa-status'. Para atualizarmos. Vamos no arquivo : 
+
+    vim /etc/apparmor.d/usr.sbin.named
+
+    Vamos ate a linha :24 e adicionar a baixo das config de leitura e escrita.\
+
+        /var/bind9/chroot/etc/bind/** r,
+        /var/bind9/chroot/var/** rw,
+        /var/bind9/chroot/dev/** rw,
+
+    Apos isso, vamos reiniciar o servico com:
+        systemctl restart apparmor 
+}
+
+5 PASSO - Mover os arquivos de configuracao.{
+
+    Vamos movimentar as config:
+        mv /etc/bind /var/bind9/chroot/etc/
+
+    Depois disso vamos criar um link de acesso. Para facilitar :
+        ln -s /var/bind9/chroot/etc/bind/ /etc/bind
+
+    Vamos copiar o arquivo do time zone para termos a time zone ok:
+        cp /etc/localtime /var/bind9/chroot/etc/
+        timedatectl : mostra o arquivo localtime. 
+
+}
