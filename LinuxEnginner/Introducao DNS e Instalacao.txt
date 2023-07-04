@@ -1,5 +1,7 @@
 DNS - Domain Name System 
 
+NS : name server
+
 Temos DNS Corporativos e Publicos. 
 
     Ex. 8.8.8.8 --> Publicos 
@@ -160,4 +162,73 @@ Porem o servico ainda nao vai subir.
     cp /root/linuxforce/datacenter/bind_chroot/etc/resolv.conf /etc/
     chattr +i /etc/resolv.conf
     
-59
+10 PASSO - Transferencia da TSIG Key. 
+
+    O principal arquivo utilizado pelo servico DNS e o named.conf
+    Nele faz uma chamada nos outros arquivos .conf do named. 
+    
+    cat /etc/bind/named.conf
+
+        include "/etc/bind/named.conf.options"          *opcoes do servidor / configuracoes
+        include "/etc/bind/named.conf.local";           *entrada de zonas DNS
+        include "/etc/bind/named.conf.default-zones"    *zonas default e root-servers.
+        include "/etc/bind/bind.keys";                  *chaves []
+
+
+        include "/etc/bind/tsig.key";                   *chaves [troca de info segura, master/slave]   
+            tsig -> protocolo usado dentro do DNS, para a troca de info ser feita com security
+            contem chave da relacao de confianca entre a troca de info entre os 2 servers. (master,slave).
+            Precisamos enviar a chave para o slave. Evitando roubo de zona. 
+            ps. A mudanca de zona sempre precisa ser realizada na Master, e esta quando alterada precisa ser enviada para Slave.           
+        
+
+    *SOMENTE NA MASTER [INTRANET] VAMOS EXECUTAR OS COMANDOS ABAIXO:
+        cd /etc/bind
+        tsig-keygen TRANSFER > tsig.key 
+        vim tsing.key
+    
+    Vamos add abaixo das linhas da chave a seguinte config:
+        server 192.168.1.20 {
+	    keys {TRANSFER; };
+        };
+
+    Agora vamos usar o scp para enviar o arquivo de key para o server slave.
+        scp -P 52020 tsig.key analista@192.168.1.20:/tmp/  
+    
+    Vamos fazer o move conectado na slave e alterar a relacao de confianca. Para dizer qual server pode usar a chave. 
+        mv /tmp/tsig.key /etc/bind/
+        server 192.168.1.10 {
+	    keys {TRANSFER; };
+        };
+
+    11 PASSO - Copia dos root.hints  
+
+    vim named.conf.default-zones            
+    
+    Zona Ponto / Root-Servers. 
+        zone "." {
+	    type hint;              *tipo hind, zona mestre. Define o root-server. 
+	    file "root.hints";      *arquivo ele tem a relacao dos root-servers 
+         };
+
+    Vamos copiar o arquivo para o diretorio do bind9.
+        
+        cp -a /usr/share/dns/root.hints /var/bind9/chroot/var/cache/bind/
+        cat /usr/share/dns/root.hints
+
+        A : address ipv4 
+        AAAA: address ipv6
+
+    Podemos ver a relacao com :
+        dig +trace www.oul.com.br
+
+    12 PASSO - Reiniciar o servico
+
+        systemctl restart named
+        systemctl status named
+        systemctl enable named
+
+    Para verificar qualquer erro no status : 
+        named-checkconf
+
+    
