@@ -99,3 +99,65 @@ Podemos ver o status dele com 'aa-status'. Para atualizarmos. Vamos no arquivo :
         timedatectl : mostra o arquivo localtime. 
 
 }
+
+6 PASSO - Criar disposivos especiais no /dev 
+
+    Vamos entrar no diretorio de dispositivos. 
+        cd /var/bind9/chroot/dev/
+
+        Os dispositivos especiais sao:
+            /dev/null
+            /dev/random
+            /dev/zero 
+
+        Indentificadores dispositivos -> Kernel 
+            1 maior/major 
+            3 menor/minor 
+
+    Vamos criar os dispositivos com o mknod.
+
+        mknod null c 1 3        
+        mknod random c 1 8
+        chmod 660 *
+
+        **|comando|dispositivos|tipo|major|minor
+        ***mudando permissao para melhor security, deixando somente para usuario e grupo para ler e escrever.
+
+7 PASSO - Mudando o permissionamento para o usuario bind. 
+
+        chown bind:bind /var/bind9/chroot/etc/bind/rndc.key 
+        chown bind:bind /var/bind9/chroot/var/ -R
+        chmod 775 /var/bind9/chroot/var/ -R
+
+8 PASSO - Alterando PID do servico do DNS. 
+
+    Vamos acessar o diretorio do named na linha 28
+        vim /etc/init.d/named
+        :28
+
+    Nessa linha vamos alterar o local do PID com a linha abaixo:
+        PIDFILE=/var/bind9/chroot/var/run/named/named.pid
+
+Agora a estrutura do CHROOT esta PRONTO!!! 
+Porem o servico ainda nao vai subir.
+
+9 PASSO - Clonagem rep https://github.com/rogerramossilva/linuxforce para falicitar config. 
+
+    cd /root 
+    apt install git vim man -y 
+    git clone https://github.com/rogerramossilva/linuxforce 
+    chattr -i /etc/resolv.conf   *Tirar protecao do resolv.conf
+
+    Na Intranet  :
+        cp /root/linuxforce/intranet/bind_chroot/etc/bind/named.conf* /etc/bind/            *copia de arquivos de configuracoes para /etc/
+        cp /root/linuxforce/intranet/bind_chroot/bind/* /var/bind9/chroot/var/cache/bind/   *copia de arquivos de zona
+        cp /root/linuxforce/intranet/bind_chroot/etc/resolv.conf /etc/                      *copia do resolv.conf para resolucao
+        attr +i resolv.conf
+
+    Na dataCenter:
+
+    cp /root/linuxforce/datacenter/bind_chroot/etc/bind/* /etc/bind/
+    cp /root/linuxforce/datacenter/bind_chroot/etc/resolv.conf /etc/
+    chattr +i /etc/resolv.conf
+    
+59
