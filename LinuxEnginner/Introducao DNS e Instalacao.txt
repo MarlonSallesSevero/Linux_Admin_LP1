@@ -33,7 +33,7 @@ CHROOT {
 
 ps. processo em ambas as maquinas, master e slave. 
 
-1 PASSO - Instalacao do pacote de Implementacao do Servico, instalar em ambas as maquinas.{
+1 PASSO - INSTALACAO DO PACOTE DE IMPLEMENTACAO DO SERVICO, INSTALAR EM AMBAS AS MAQUINAS.{
     apt update
     apt install bind9 bind9utils dnsutils -y
 
@@ -46,7 +46,7 @@ ps. processo em ambas as maquinas, master e slave.
     Esses sao os diretorios, padroes apos a instalacao do bind. Porem como vamos utilizar o conceito CHROOT.
     }
 
-2 PASSO - Escolher um diretorio para a implementacao do CHROOT.{
+2 PASSO - ESCOLHER UM DIRETORIO PARA A IMPLEMENTACAO DO CHROOT.{
 
     mkdir -pv /var/bind9/chroot/{etc,dev,var/cache/bind,var/run/named}
 
@@ -71,7 +71,7 @@ ps. processo em ambas as maquinas, master e slave.
 
 }
 
-4 PASSO - Atualizar o servico do apparmor{
+4 PASSO - ATUALIZAR O SERVICO DO APPARMOR{
 
 apparmor : Servico mandandatorios, ele tem como objetivo trazer uma protecao a mais. 
 Podemos ver o status dele com 'aa-status'. Para atualizarmos. Vamos no arquivo : 
@@ -88,7 +88,7 @@ Podemos ver o status dele com 'aa-status'. Para atualizarmos. Vamos no arquivo :
         systemctl restart apparmor 
 }
 
-5 PASSO - Mover os arquivos de configuracao.{
+5 PASSO - MOVER OS ARQUIVOS DE CONFIGURACAO.{
 
     Vamos movimentar as config:
         mv /etc/bind /var/bind9/chroot/etc/
@@ -102,7 +102,7 @@ Podemos ver o status dele com 'aa-status'. Para atualizarmos. Vamos no arquivo :
 
 }
 
-6 PASSO - Criar disposivos especiais no /dev 
+6 PASSO - CRIAR DISPOSIVOS ESPECIAIS NO /DEV 
 
     Vamos entrar no diretorio de dispositivos. 
         cd /var/bind9/chroot/dev/
@@ -125,13 +125,13 @@ Podemos ver o status dele com 'aa-status'. Para atualizarmos. Vamos no arquivo :
         **|comando|dispositivos|tipo|major|minor
         ***mudando permissao para melhor security, deixando somente para usuario e grupo para ler e escrever.
 
-7 PASSO - Mudando o permissionamento para o usuario bind. 
+7 PASSO - MUDANDO O PERMISSIONAMENTO PARA O USUARIO BIND. 
 
         chown bind:bind /var/bind9/chroot/etc/bind/rndc.key 
         chown bind:bind /var/bind9/chroot/var/ -R
         chmod 775 /var/bind9/chroot/var/ -R
 
-8 PASSO - Alterando PID do servico do DNS. 
+8 PASSO - ALTERANDO PID DO SERVICO DO DNS. 
 
     Vamos acessar o diretorio do named na linha 28
         vim /etc/init.d/named
@@ -143,7 +143,7 @@ Podemos ver o status dele com 'aa-status'. Para atualizarmos. Vamos no arquivo :
 Agora a estrutura do CHROOT esta PRONTO!!! 
 Porem o servico ainda nao vai subir.
 
-9 PASSO - Clonagem rep https://github.com/rogerramossilva/linuxforce para falicitar config. 
+9 PASSO - CLONAGEM REP HTTPS://GITHUB.COM/ROGERRAMOSSILVA/LINUXFORCE PARA FALICITAR CONFIG. 
 
     cd /root 
     apt install git vim man -y 
@@ -162,7 +162,7 @@ Porem o servico ainda nao vai subir.
     cp /root/linuxforce/datacenter/bind_chroot/etc/resolv.conf /etc/
     chattr +i /etc/resolv.conf
     
-10 PASSO - Transferencia da TSIG Key. 
+10 PASSO - TRANSFERENCIA DA TSIG KEY. 
 
     O principal arquivo utilizado pelo servico DNS e o named.conf
     Nele faz uma chamada nos outros arquivos .conf do named. 
@@ -172,7 +172,7 @@ Porem o servico ainda nao vai subir.
         include "/etc/bind/named.conf.options"          *opcoes do servidor / configuracoes
         include "/etc/bind/named.conf.local";           *entrada de zonas DNS
         include "/etc/bind/named.conf.default-zones"    *zonas default e root-servers.
-        include "/etc/bind/bind.keys";                  *chaves []
+        include "/etc/bind/bind.keys";                  *chaves [Keys]
 
 
         include "/etc/bind/tsig.key";                   *chaves [troca de info segura, master/slave]   
@@ -201,7 +201,7 @@ Porem o servico ainda nao vai subir.
 	    keys {TRANSFER; };
         };
 
-    11 PASSO - Copia dos root.hints  
+    11 PASSO - COPIA DOS ROOT.HINTS  
 
     vim named.conf.default-zones            
     
@@ -222,13 +222,94 @@ Porem o servico ainda nao vai subir.
     Podemos ver a relacao com :
         dig +trace www.oul.com.br
 
-    12 PASSO - Reiniciar o servico
+    12 PASSO - REINICIAR O SERVICO
 
         systemctl restart named
         systemctl status named
         systemctl enable named
 
-    Para verificar qualquer erro no status : 
-        named-checkconf
+        Para verificar qualquer erro no status : 
+            named-checkconf
+    
+    13 PASSO - ENTENDENDO AS OPCOES DO SERVIDOR DNS E ARQUIVOS DE ZONA NO MASTER SERVER.
+
+        Dentro de /etc/bind temos o arquivo de opcoes/configuracoes do servidor.
+            named.conf.options {
+
+                    directory "/var/cache/bind";                                                *diretorio de armazenamento das zonas dns **[lembrando que temos o link do chroot], ***[/var/cache/bind = /var/bind9/chroot/var/cache/bind]
+                    version "not available";                                                    *utilizado para ocutar a versao do DNS.               
+                    dnssec-enable yes;                                                          *Domain Name System Security Extetion, protocolo pra trazer seguranca. *[Obsoleto, comentar para tirar] 
+                    dnssec-validation auto;                                                     *Validacao
+                    allow-query { 200.50.100.0/24; 192.168.1.0/24; 10.0.0.0/24; 127.0.0.1; };   *Quem pode fazer consultas no servidor
+                    allow-recursion { 192.168.1.0/24; 10.0.0.0/24; 127.0.0.1; };                *Consultas recursivas. 
+                    allow-transfer { key TRANSFER; };                                           *Permissao de transferencia de zona 
+                    forwarders { 8.8.8.8; };                                                    *Encaminhadores caso o servidor DNS nao tenha a resposta. 
+                    notify yes;                                                                 *Coligado com a tranferencia de zona. Notificacoes 
+                    also-notify { 192.168.1.20; };		                                        *Quais servidores serao notificados 
+                    listen-on-v6 { any; };                                                      *Habilita a opcao Ipv6 
+
+            }
 
     
+    14 PASSO - CRIANDO ACLS NO MASTER SERVER
+        Vamos entrar dentro do arquivo named.conf.local 
+            vim /etc/bind/named.conf.local
+
+    Vamos ser responsavel por 1 dominio, asf.com.
+    Ele sera utilizado de forma interna [maquinas da rede interna] e tambem externa [maquina fora da rede]. 
+    
+    Quando temos consultas no DNS, temos 2 cenarios : 
+        *Solicitacoes Rede Interna [info da rede interna]
+        *Solicitacoes Rede Externa [info da rede externa]
+
+    Para deixar isso funcional e correto, vamos precisar criar ACLS [Access control list]. 
+
+    *ENTENDENDO A CONFIG* :
+
+
+        include "/etc/bind/rndc.key";         #include key file
+
+        inet 127.0.0.1 port 953 allow { localhost; } keys { "rndc-key"; };};         *Criacao do controle, liberando a chave default. [rndc]
+
+        acl "redeinterna" {                 *1 ACL, utilizado para a rede interna e VPN.
+        192.168.1.0/24;
+        10.0.0.0/24;
+        127.0.0.1;
+        };
+
+        acl "redeexterna" {                 *2 ACL, utilizado para a rede externa. 
+        200.50.100.0/24;
+        };
+
+        view "externa" {                    **  View Externa 
+        match-clients { redeexterna; };         Clientes que estao na ACL rede externa podem usar a view. 
+        zone "asf.com" {                        Nome da zona 
+            type master;                        Definindo zona master
+            file "db.asf.externa";              arquivo que a entrada da zona aponta. Arquivo precisa ser criado em /var/bind9/chroot/var/cache/bind
+        };                                  **
+
+        zone 100.50.200.in-addr.arpa {      **DNS Reverso, 100.50.200.[REDE].in-addr.arpa[Special domain] = 10.100.50.200
+        
+            type master;
+            file "rev.asf.externa";
+            };
+        };
+
+        view "interna" {
+        match-clients { redeinterna; };
+        zone "asf.com" {
+            type master;
+            file "db.asf.interna";
+        };
+        zone 1.168.192.in-addr.arpa {
+            type master;
+            file "rev.asf.interna";
+        };
+        };
+
+
+
+
+
+
+        
