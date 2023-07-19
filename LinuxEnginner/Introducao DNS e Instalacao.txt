@@ -276,39 +276,53 @@ Porem o servico ainda nao vai subir.
         10.0.0.0/24;
         127.0.0.1;
         };
-
-        acl "redeexterna" {                 *2 ACL, utilizado para a rede externa. 
-        200.50.100.0/24;
-        };
-
-        view "externa" {                    **  View Externa 
-        match-clients { redeexterna; };         Clientes que estao na ACL rede externa podem usar a view. 
-        zone "asf.com" {                        Nome da zona 
-            type master;                        Definindo zona master
-            file "db.asf.externa";              arquivo que a entrada da zona aponta. Arquivo precisa ser criado em /var/bind9/chroot/var/cache/bind
-        };                                  **
-
-        zone 100.50.200.in-addr.arpa {      **DNS Reverso, 100.50.200.[REDE].in-addr.arpa[Special domain] = 10.100.50.200
         
-            type master;
-            file "rev.asf.externa";
-            };
-        };
+        acl "redeexterna" {                 *2 ACL, utilizado para a rede externa.                                                                          |
+        200.50.100.0/24;                                                                                                                                    |
+        };                                                                                                                                                  |
+                                                                                                                                                            |
+        view "externa" {                    **  View Externa                                                                                                |
+        match-clients { redeexterna; };         Clientes que estao na ACL rede externa podem usar a view.                                                   |
+        zone "asf.com" {                        Nome da zona                                                                                                |
+            type master;                        Definindo zona master                                                                                       |
+            file "db.asf.externa";              arquivo que a entrada da zona aponta. Arquivo precisa ser criado em /var/bind9/chroot/var/cache/bind        |
+        };                                  **                                                                                                              |
+                                                                                                                                                            |---->Solicitacoes rede externas, entrega de ip externo. 
+        zone 100.50.200.in-addr.arpa {      **DNS Reverso, 100.50.200.[REDE].in-addr.arpa[Special domain] = 10.100.50.200                                   |
+                                                                                                                                                            |
+            type master;                                                                                                                                    |
+            file "rev.asf.externa";                                                                                                                         |
+            };                                                                                                                                              |
+        };                                                                                                                                                  |
 
-        view "interna" {
-        match-clients { redeinterna; };
-        zone "asf.com" {
-            type master;
-            file "db.asf.interna";
-        };
-        zone 1.168.192.in-addr.arpa {
-            type master;
-            file "rev.asf.interna";
-        };
-        };
+        view "interna" {                               
+        match-clients { redeinterna; };    Clientes que estao na ACL rede interna podem usar a view.                                                        |
+        zone "asf.com" {                   Nome da zona                                                                                                     |
+            type master;                   Definindo zona master                                                                                            |
+            file "db.asf.interna";         WWW IN A 192.168.1.10 (exemplo)                                                                                  |
+        };                                                                                                                                                  |----->Solicitacoes rede interna, entrega de ip interno. 
+        zone 1.168.192.in-addr.arpa {                                                                                                                       |
+            type master;                                                                                                                                    |                                               
+            file "rev.asf.interna";                                                                                                                         |
+        };                                                                                                                                                  |
+        };                                                                                                                                                  |
 
+        Resumindo, 4 arquivos de zona, 2 view externa e 2 view interna. 
+        
+        *ps. na maquina slave, precisamos definir na config qual maquina e a slave.
 
+        **Podemos fazer uma sincronizacao de um servidor DNS windows e um Linux. Master e slave. \
 
+    15 PASSO - REGRA DE NAT (Na maquina Gateway)
+
+    *Vamos criar uma regra que vai falar : 
+        Toda conexao de origem 200.50.100.100 (cliente externo ) com destino a maquina 
+        gateway (200.50.100.10) com protocolo udp e porta de destino 53 muda o endereco final 
+        para 192.168.1.10. 
+
+    *dns 
+    protocolo : udp 
+    porta: 53 
 
 
 
