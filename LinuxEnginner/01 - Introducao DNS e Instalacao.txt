@@ -320,6 +320,11 @@ Porem o servico ainda nao vai subir.
         gateway (200.50.100.10) com protocolo udp e porta de destino 53 muda o endereco final 
         para 192.168.1.10. 
 
+        Exemplo regra usando iptables :
+
+        #Habilita a resolucao de nomes do cliente Externo
+            iptables -t nat -A PREROUTING -p udp -i enp0s9 -s $LNK -d $FWL1 --dport 53 -j DNAT --to-destination $INT:53
+
     *dns 
     protocolo : udp 
     porta: 53 

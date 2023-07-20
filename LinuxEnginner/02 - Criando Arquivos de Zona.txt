@@ -1,0 +1,167 @@
+Apos realizarmos a config anterior, vamos criar o arquivo de zona definido no PASSO 14 do ARQUIVO 01.
+Se olharmos a config desse cenario atual, temos.
+
+Externa : db.asf.externa (Pesquisa direta)
+          rev.asf.externa (Pesquisa reversa)
+
+Interna : db.asf.interna (Pesquisa direta)
+          rev.asf.interna (Pesquisa reversa)
+
+
+__________________________________________________________________________________________________________________________
+
+***Criando db.asf.interna***
+
+Vamos criar esse arquivo de zona em /var/bind9/chroot/var/cache/bind .
+
+    exemplo arq : 
+
+    vim db.asf.interna
+
+        __________________________________________________________
+       |    $TTL 7200 ; default para registros sem TTL            |
+       |    ;                                                     |
+       |    @	IN	SOA	ns1.asf.com.	analista.asf.com. (       |
+       |        2022010101 ; serial                               |
+                8h ; refresh                                      |
+                1h ; retry                                        |
+                3d ; expire                                       |
+                3h ; negative caching TTL                         |
+            );                                                    |
+            ;                                                     |
+            @			IN	NS		ns1.asf.com.                  |
+            @			IN	NS		ns2.asf.com.                  |
+            @			IN	MX		10 mail.asf.com.              |
+            @			IN	A		192.168.1.40                  |
+            ns1			IN	A		192.168.1.10                  |
+            ns2			IN	A		192.168.1.20                  |
+            www			IN	A		192.168.1.30                  |
+            ftp			IN	CNAME		www                       |
+            mail			IN	A		192.168.1.20              |
+            smtp			IN	CNAME		mail                  |
+            pop			IN	CNAME		mail                      |
+            imap			IN	CNAME		mail                  |
+            webmail			IN	CNAME		mail                  |
+            gateway			IN	A		192.168.1.1               |
+            intranet		IN	A		192.168.1.10              |
+            datacenter		IN	A		192.168.1.20              |
+            storage			IN	A		192.168.1.30              |
+            interno			IN	A		192.168.1.100             |
+    |        ad			IN	A		192.168.1.40                  |
+    |       express			IN	A		192.168.1.10              |
+    |_____________________________________________________________|
+
+    **ps.ponto final para nao auto completar. 
+    
+    *Legenda:
+
+        SOA : Start of authority        *1 por zona, traz as info de NS
+        NS : Name Server                *Traz os servidores de DNS
+        MX : Main exchange              *Servidor de Email
+        A : IPv4                        *Address ipv4, faz o apontamento nome -> end.IP
+        AAAA: IPv6                      *Address ipv6  faz o apontamento nome -> end.IP
+        CNAME : Common Name             *Nome comum 
+        @ : Dominio de Zona             *Nesse exemplo, asf.com  
+        serial : Igual master (AAAAMMDDHH)           *Comparativo para alteracao, automatica. 
+        TTL : Time to Live
+
+    Podemos fazer alguns testes com o comando dig:
+        dig +short asf.com soa
+        dig +short asf.com ns
+        dig +short asf.com mx
+        dig +short www.asf.com 
+        dig +short gateway.asf.com 
+
+__________________________________________________________________________________________________________________________
+
+No arquivo de pesquisa reversa, temos alguns detalhes a serem considerados. 
+
+Dominio do rev.asf.com e 1.168.192.in-addr.arpa 
+
+Vamos criar esse arquivo de zona em /var/bind9/chroot/var/cache/bind .
+
+    vim rev.asf.interna
+
+    exemplo arq : 
+
+    _________________________________________________________                                                    |   
+   |    $TTL 7200 ; default para registros sem TTL           | 
+   |       ;                                                 | 
+        @	IN	SOA	ns1.asf.com.	analista.asf.com. (      |
+            2022010101 ; serial                              |
+            8h ; refresh                                     |
+            1h ; retry                                       |
+            3d ; expire                                      |
+            3h ; negative caching TTL                        |
+        );                                                   |
+        ;                                                    |
+        @	IN	NS	ns1.asf.com.                             |
+        @	IN	NS	ns2.asf.com.                             |
+        @	IN	A	192.168.1.40                             |
+        ns1	IN	A	192.168.1.10                             |
+        ns2	IN	A	192.168.1.20                             |
+        1	IN	PTR	gateway.asf.com.                         |
+        10	IN	PTR	intranet.asf.com.	                     |
+        20	IN	PTR	datacenter.asf.com.                      |
+|        30	IN	PTR	storage.asf.com.                         |
+|       100	IN	PTR	interno.asf.com.                         |
+|        40	IN	PTR	ad.asf.com.                              |
+|____________________________________________________________|
+
+Legenda : 
+
+PTR : Ponteiro         
+
+Podemos fazer os mesmos testes com dig:
+
+dig +short -x 192.168.1.1
+dig +short -x 192.168.1.10
+dig +short -x 192.168.1.30
+dig +short -x 192.168.1.40
+
+__________________________________________________________________________________________________________________________
+
+No arquivo de pesquisa externa, temos alguns detalhes a serem considerados. 
+
+Vamos criar esse arquivo de zona em /var/bind9/chroot/var/cache/bind .
+
+    vim db.asf.externa 
+
+    exemplo arq : 
+
+        ________________________________________________________
+        |   $TTL 7200 ; default para registros sem TTL          |
+        |   ;                                                   |    
+        |   @	IN	SOA	ns1.asf.com.	analista.asf.com. (     |    
+                2022010101 ; serial                             |    
+                8h ; refresh                                    |    
+                1h ; retry                                      | 
+                3d ; expire                                     |  
+                3h ; negative caching TTL                       | 
+            );                                                  | 
+            ;                                                   | 
+            @		IN	NS	ns1.asf.com.                        | 
+            @		IN	NS	ns2.asf.com.                        | 
+            @		IN	MX	10 mail.asf.com.                    | 
+            @		IN	A	200.50.100.10                       | 
+            @		IN	TXT	"v=spf1 a mx ip4:200.50.100.20 -all"| 
+            ns1		IN	A	200.50.100.10                       | 
+            ns2		IN	A	200.50.100.20                       | 
+            www		IN	A	200.50.100.10                       | 
+            ftp		IN	CNAME	www                             | 
+            mail		IN	A	200.50.100.20                   | 
+            smtp		IN	CNAME	mail                        | 
+            pop		IN	CNAME	mail                            | 
+            imap		IN	CNAME	mail                        | 
+        |                                                       |
+        |   webmail		IN	CNAME	mail                        | 
+        |_______________________________________________________|
+
+        Legenda : 
+
+        200.50.100.10 >>> utiliza regra de NAT no gateway criada. 
+        TXT: Parametro utilziado para passar o spf (Sender Policy Framework) **Tecnologia utilizada para seguranca de emails.
+
+        ps. Depois de Configurar arquivos, reiniciar na master e slave o bind9.
+
+        systemctl restart bind9
