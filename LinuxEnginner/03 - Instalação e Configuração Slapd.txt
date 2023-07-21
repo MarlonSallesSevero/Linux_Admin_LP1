@@ -1,0 +1,57 @@
+LDAP - Lightweight directory access protocol 
+
+Objetivo principal da aplicacao e a centralizacao de informacao.
+Protocolo de acesso de diretorio.
+O LDAP existe tanto no AD como em um SAMBA da vida. 
+Vamos utilizar o Open Ldap
+
+Essa implementacao vai ser basicamente em 3 etapas : 
+
+    1 - Estruturar os servicos
+    2 - Estruturar os usuarios 
+    3 - Realizar as integracoes
+
+_________________________________________________________________________________________________
+
+
+1 PASSO - instalacao slapd e o ldap-utils
+    apt install slapd ldap-utils -y 
+Apos isso sera gerado o diretorio do ldap no /etc/
+
+2 PASSO - Entendendo arquivos 
+
+    ldap.conf >> Arquivo de config do cliente (nao e do servidor)
+    sasl2     >> Utilizado para autenticacao segura (Simple Authentication And Security Layer)
+    schema    >> Basicamente o banco do LDAP, estruturacao do LDAP.
+    slapd.d   >> Utilizado para armazenar configuracoes do servidor. 
+    slapd.conf >> Ele nao vem por padrao, precisamos ir ate /usr/share/doc/slapd/examples para ter uma base e pegar o arquivo .gz
+
+3 PASSO - Descompactar o arquivo e enviar para a pasta. 
+
+    dentro do /etc/ldap:
+        gzip -k -d /usr/share/doc/slapd /examples/slapd.conf.gz -c > /etc/ldap/slapd.conf
+
+4 PASSO - CONFIG no slap.conf
+    vim slapd.conf 
+
+    *A primeira mudanca bem vinda e a config de info de log e o logfile.
+
+        # Read slapd.conf(5) for possible values
+        loglevel        acl trace           #Exemplo
+        logfile 	/var/log/slapd.log 
+
+    *Total de conexoes e threads
+
+    *Ver a config do banco se e BDB ou MDB em moduleload, 'backend' e 'database'
+
+    *Arrumar o sufixo
+
+    *Config super admin no parametro do `rootdn`, e gerar a senha com slappasswd >> slapd.conf e depois colocar abaixo no parametro rootpw. 
+
+    *Configs globais
+
+5 PASSO - Ajuste permissionamento openldap.
+
+chown openldap:openldap -R /var/lib/ldap/ /etc/ldap/slapd.d/
+slaptest -f slapd.conf -F slapd.d
+
